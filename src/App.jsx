@@ -1,0 +1,760 @@
+import React, { useState, useEffect } from 'react';
+import { FaSearch, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaPlayCircle, FaHandsHelping, FaPhoneAlt, FaFileSignature, FaBriefcase, FaUserShield, FaUserGraduate, FaWheelchair, FaBalanceScale, FaFilter, FaCheckCircle, FaStar, FaPlusSquare, FaEllipsisV } from 'react-icons/fa';
+import './index.css';
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+
+  return (
+    <div>
+      <SocialSidebar />
+      <Header setCurrentPage={setCurrentPage} />
+
+      {currentPage === 'home' && (
+        <>
+          <Hero />
+          <AboutSection setCurrentPage={setCurrentPage} />
+
+          <div className="main-layout">
+            <WhatsNew />
+            <ActionGrid />
+          </div>
+
+          <LigalSakhiCells />
+          <SuccessStories />
+        </>
+      )}
+
+      {currentPage === 'about' && <AboutPage />}
+      {currentPage === 'legalResources' && <LegalResourcesPage />}
+      {currentPage === 'findAdvocates' && <FindAdvocatesPage />}
+      {currentPage === 'emergency' && <EmergencyPage />}
+      {currentPage === 'schemes' && <SchemesPage />}
+      {currentPage === 'media' && <MediaPage />}
+      {currentPage === 'contact' && <ContactPage />}
+      {currentPage === 'userLogin' && <UserLogin setCurrentPage={setCurrentPage} />}
+      {currentPage === 'advocateLogin' && <AdvocateLogin setCurrentPage={setCurrentPage} />}
+      <Footer />
+      <div className="accessibility-btn">
+        <FaWheelchair />
+      </div>
+    </div>
+  );
+}
+
+function Header({ setCurrentPage }) {
+  return (
+    <header className="sticky-header">
+      <div className="very-top-bar">
+        <div className="left-links">
+          Skip to Main Content | Screen Reader Access | हिंदी | मराठी
+        </div>
+        <div className="right-links">
+          Last Updated: 08 May 2026 | Visitor No: 12,47,839
+        </div>
+      </div>
+      <div className="top-header">
+        <div className="header-logos" style={{ cursor: 'pointer' }} onClick={() => setCurrentPage('home')}>
+          <img src="/LigalSakhiLogo.png" alt="LigalSakhi Logo" className="brand-logo" />
+          <div>
+            <h1>महिला सहायता एवं कानूनी सहयोग</h1>
+            <span className="subtitle">LigalSakhi - Women Helper & Legal Advocate Finder</span>
+            <span className="sub-subtitle">Government of Maharashtra Initiative</span>
+          </div>
+        </div>
+        <div className="search-and-login">
+          <div className="search-container">
+            <input type="text" placeholder="Search here..." />
+            <FaSearch />
+          </div>
+          <button className="login-btn-outline" onClick={() => setCurrentPage('userLogin')}>User Login</button>
+          <button className="login-btn-solid" onClick={() => setCurrentPage('advocateLogin')}>Advocate Login</button>
+        </div>
+      </div>
+      <nav className="main-nav">
+        <a href="#" className="active" onClick={() => setCurrentPage('home')}>Home</a>
+        <a href="#" onClick={() => setCurrentPage('about')}>About Us</a>
+        <a href="#" onClick={() => setCurrentPage('legalResources')}>Legal Resources</a>
+        <a href="#" onClick={() => setCurrentPage('findAdvocates')}>Find Advocates</a>
+        <a href="#" onClick={() => setCurrentPage('emergency')}>Emergency Help</a>
+        <a href="#" onClick={() => setCurrentPage('schemes')}>Schemes & Support</a>
+        <a href="#" onClick={() => setCurrentPage('media')}>Media</a>
+        <a href="#" onClick={() => setCurrentPage('contact')}>Contact Us</a>
+      </nav>
+    </header>
+  );
+}
+
+function SocialSidebar() {
+  return (
+    <div className="social-sidebar">
+      <a href="https://www.facebook.com/profile.php?id=61589661144564" target="_blank" rel="noopener noreferrer" className="fb"><FaFacebookF /></a>
+      <a href="https://x.com/LigalSakhi" target="_blank" rel="noopener noreferrer" className="x"><FaTwitter /></a>
+      <a href="https://www.instagram.com/shahanevaishnavi162026" target="_blank" rel="noopener noreferrer" className="ig"><FaInstagram /></a>
+      <a href="#" className="yt"><FaYoutube /></a>
+    </div>
+  );
+}
+
+function Hero() {
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlide(s => (s + 1) % 2);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className={`hero-section slide-${slide}`}>
+      {slide === 0 ? (
+        <div className="hero-content">
+          <h2>Find Verified Legal Advocates Near You</h2>
+          <p>Connecting women with trusted legal professionals across Maharashtra</p>
+          <button className="hero-btn">Free. Safe. Confidential.</button>
+        </div>
+      ) : (
+        <div className="hero-content">
+          <h2>Emergency Help is Just One Call Away</h2>
+          <p>Helpline 181 — 24x7 Legal & Safety Support for Women</p>
+          <button className="hero-btn">Immediate Assistance</button>
+        </div>
+      )}
+      <div className="carousel-dots">
+        <span className={slide === 0 ? "dot active" : "dot"} onClick={() => setSlide(0)}></span>
+        <span className={slide === 1 ? "dot active" : "dot"} onClick={() => setSlide(1)}></span>
+      </div>
+    </div>
+  );
+}
+
+function AboutSection({ setCurrentPage }) {
+  return (
+    <div className="about-section">
+      <div className="about-img" style={{ background: 'transparent' }}>
+        <img src="/Image.png" alt="About Us" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '10px' }} />
+      </div>
+      <div className="about-content">
+        <span className="badge">Who We Are</span>
+        <h2>About Us</h2>
+        <br />
+        <p>
+          LegalSakhi is a dedicated legal support platform created to protect and empower women, girls, and female students, especially those facing violence, abuse, or harassment. Our mission is to ensure that every woman receives immediate legal help, accurate information, and access to trusted advocates when she needs it the most.
+        </p>
+        <button className="btn-dark" onClick={() => setCurrentPage('about')}>Know More</button>
+      </div>
+    </div>
+  );
+}
+
+function WhatsNew() {
+  const news = [
+    "From Barmer to Global Stage | Ruma Devi's Inspiring Journey | NCW Podcast",
+    "Corrigendum Extension of Expression of Interest (EOI) for Empanelment of NGOs/ CSOs as Non-Financial Partners submission date reg",
+    "NCW Calls for Faster Trials, Stronger Surveillance and Parole Ban in Heinous Sexual Crime Cases",
+    "Walk-In Interview for engagement of Project Associate (1 post) and Project Assistant (2 Posts) on Contract basis and temporary co-terminus with the project in National Commission for Women."
+  ];
+
+  return (
+    <div className="whats-new">
+      <h2>Whats New <FaPlayCircle style={{ color: '#666', fontSize: '20px', marginLeft: 'auto' }} /> <button style={{ background: 'white', border: '1px solid #ddd', padding: '5px 15px', borderRadius: '4px', cursor: 'pointer' }}>View all</button></h2>
+      {news.map((n, i) => (
+        <div key={i} className="news-card">
+          <p>◦ {n}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ActionGrid() {
+  return (
+    <div className="action-grid">
+      <div className="action-card bg-1"><FaHandsHelping color="#2d587a" /> PMCC - TERE MERE SAPNE - Training Module</div>
+      <div className="action-card bg-2"><FaPhoneAlt color="#c12dd6" /> NCW 24*7 Helpline Call 14490</div>
+      <div className="action-card bg-3"><FaFileSignature color="#0da27d" /> Register Complaint</div>
+      <div className="action-card bg-4"><FaBriefcase color="#3c8dbc" /> eProposal-Work with us</div>
+      <div className="action-card bg-5"><FaUserShield color="#c59918" /> Login for State Maharashtra Officers</div>
+    </div>
+  );
+}
+
+function LigalSakhiCells() {
+  return (
+    
+    <div className="ncw-cells">
+      <h2>LigalSakhi Cells</h2>
+      <div className="cells-grid">
+        <div className="cell-card c-1"><span style={{ background: '#b74bd4', color: 'white', padding: '8px', borderRadius: '50%' }}><FaPhoneAlt size={14} /></span> Complaint Redressal</div>
+        <div className="cell-card c-2"><span style={{ background: '#c59918', color: 'white', padding: '8px', borderRadius: '50%' }}><FaBriefcase size={14} /></span> Policy Monitoring</div>
+        <div className="cell-card c-3"><span style={{ background: '#0da27d', color: 'white', padding: '8px', borderRadius: '50%' }}><FaUserShield size={14} /></span> Women Safety & Welfare</div>
+        <div className="cell-card c-4"><span style={{ background: '#3c8dbc', color: 'white', padding: '8px', borderRadius: '50%' }}><FaHandsHelping size={14} /></span> Empowering Women</div>
+        <div className="cell-card c-5"><span style={{ background: '#d9534f', color: 'white', padding: '8px', borderRadius: '50%' }}><FaFileSignature size={14} /></span> Other Supporting Cells</div>
+      </div>
+    </div>
+  );
+}
+
+function SuccessStories() {
+  return (
+    <div className="success-stories">
+      <div className="story-left">
+        <span className="badge">Success Stories</span>
+        <h2>We have Stories to inspire you</h2>
+        <p>Countless stories of strength, resilience, and transformation, we highlight the profound impact our helpline has made on the lives of women across the globe.</p>
+        <button className="btn-dark">Know More</button>
+      </div>
+      <div className="story-cards">
+        <div className="story-card">
+          <div className="story-card-img sc-1">STOP VIOLENCE AGAINST WOMEN</div>
+          <div className="story-card-content">
+            <span className="story-card-badge">Domestic Violence</span>
+            <p>The Commission received a complaint from a woman, who was pregnant.</p>
+          </div>
+        </div>
+        <div className="story-card">
+          <div className="story-card-img sc-2">Child Custody Illustration</div>
+          <div className="story-card-content">
+            <span className="story-card-badge">Child Custody</span>
+            <p>The Commission received a complaint from Chheharta, Amritsar, Punjab.</p>
+          </div>
+        </div>
+        <div className="story-card">
+          <div className="story-card-img sc-3">Shelter Home Illustration</div>
+          <div className="story-card-content">
+            <span className="story-card-badge">Shelter Home</span>
+            <p>The Commission received a complaint from Muzaffarnagar, Uttar Pradesh.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function UserLogin({ setCurrentPage }) {
+  const [isSignUp, setIsSignUp] = useState(false);
+  return (
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-left user-bg">
+          <h2>{isSignUp ? "Join LigalSakhi" : "Welcome Back!"}</h2>
+          <p>Access legal resources and find trusted advocates near you.</p>
+        </div>
+        <div className="login-right">
+          <h2>{isSignUp ? "User Sign Up" : "User Login"}</h2>
+          <form className="login-form">
+            {isSignUp && <input type="text" placeholder="Full Name" />}
+            <input type="email" placeholder="Email Address" />
+            <input type="password" placeholder="Password" />
+            <button type="button" className="submit-btn">{isSignUp ? "Sign Up" : "Sign In"}</button>
+          </form>
+          <p className="switch-login" onClick={() => setIsSignUp(!isSignUp)}>
+            {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdvocateLogin({ setCurrentPage }) {
+  const [isSignUp, setIsSignUp] = useState(false);
+  return (
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-left adv-bg">
+          <h2>{isSignUp ? "Partner With Us" : "Advocate Portal"}</h2>
+          <p>Provide legal aid and empower women across Maharashtra.</p>
+        </div>
+        <div className="login-right">
+          <h2>{isSignUp ? "Advocate Sign Up" : "Advocate Login"}</h2>
+          <form className="login-form">
+            {isSignUp && <input type="text" placeholder="Full Name" />}
+            <input type="email" placeholder="Email Address" />
+            <input type="password" placeholder="Password" />
+            <input type="text" placeholder="Bar Council Registration Number (Unique ID)" required />
+            <button type="button" className="submit-btn" onClick={() => alert('Authenticating Unique Advocate ID...')}>
+              {isSignUp ? "Verify & Sign Up" : "Verify & Sign In"}
+            </button>
+          </form>
+          <p className="switch-login" onClick={() => setIsSignUp(!isSignUp)}>
+            {isSignUp ? "Already registered? Sign In" : "New Advocate? Sign Up"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AboutPage() {
+  return (
+    <div className="about-page">
+      <div className="about-header">
+        <h1>About LegalSakhi</h1>
+        <p>A compassionate, women-centric legal assistance platform built with one clear purpose: to support and protect women, girls, and female students.</p>
+      </div>
+      
+      <div className="about-body">
+        <section className="about-text-block">
+          <p>We understand that legal problems often appear during the most stressful and vulnerable moments of a woman’s life. Whether it is domestic violence, sexual harassment, stalking, cyberbullying, assault, or workplace discrimination, victims often don’t know who to trust, where to go, or how to begin the legal process. LegalSakhi was created to solve exactly this problem.</p>
+        </section>
+
+        <section className="about-grid">
+          <div className="about-card">
+            <h3>Our Mission</h3>
+            <p>LegalSakhi aims to make legal support accessible, fast, safe, and understandable for every woman. Our mission is to ensure that no woman feels alone while seeking justice.</p>
+            <ul>
+              <li>Connecting victims with verified, trustworthy advocates</li>
+              <li>Providing emergency legal guidance</li>
+              <li>Offering step-by-step action plans</li>
+              <li>Simplifying complex legal procedures</li>
+              <li>Educating women about their rights, protections, and legal options</li>
+              <li>Offering real support through live chat and direct calling</li>
+            </ul>
+            <p><strong>LegalSakhi acts as a bridge between victims and the justice system, ensuring that help reaches women at the right time.</strong></p>
+          </div>
+
+          <div className="about-card">
+            <h3>Why LegalSakhi Exists</h3>
+            <p>Many women hesitate to report crimes because of fear or social pressure, lack of legal knowledge, no trusted support, confusion about where to complain, not knowing the right lawyer, language barriers, and worry about safety.</p>
+            <p>LegalSakhi removes these barriers by offering:</p>
+            <ul>
+              <li>Anonymous and safe communication</li>
+              <li>Simple legal information in English, Hindi, and Marathi</li>
+              <li>Verified lawyer connections</li>
+              <li>One-tap emergency helplines</li>
+              <li>A trusted, government-portal-style interface</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="about-offers">
+          <h2>What LegalSakhi Offers</h2>
+          <div className="offers-grid">
+            <div className="offer-item">
+              <h4>🔹 Emergency Legal Help</h4>
+              <p>For urgent cases, we guide victims on immediate safety steps, evidence collection, FIR filing, legal rights, police procedures, and digital/online complaint options.</p>
+            </div>
+            <div className="offer-item">
+              <h4>🔹 Live Chat & Call With Advocates</h4>
+              <p>Victims can instantly connect with verified nearby advocates, experts in criminal law, family law, cyber law, women’s rights, and professionals who speak their preferred language.</p>
+            </div>
+            <div className="offer-item">
+              <h4>🔹 Lawyer Directory</h4>
+              <p>A reliable list of advocates with their experience, practice areas, contact options, availability, and location.</p>
+            </div>
+            <div className="offer-item">
+              <h4>🔹 Know Your Rights</h4>
+              <p>Clear, understandable guides on Domestic Violence Act, Sexual Harassment & POSH, Cybercrime and online abuse, Police procedures, Protection orders, and Legal options for minors and students.</p>
+            </div>
+            <div className="offer-item">
+              <h4>🔹 Women Safety Helplines</h4>
+              <p>Instant access to National women helplines, Emergency numbers, Local police stations, State government support lines, and NGO support.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="about-vision">
+          <h2>Our Vision & Promise</h2>
+          <p>We envision a society where women feel safe, informed, and empowered. No victim suffers in silence. Legal guidance is accessible to all, and justice is not complicated or intimidating.</p>
+          <p>We promise Confidentiality, Empathy, Accuracy, Safety-first guidance, Support in 3 languages, and Access to real, verified advocates.</p>
+          <blockquote>"We are not just a platform. We are your Sakhi — a friend who stands by you when it matters the most."</blockquote>
+        </section>
+
+        <section className="about-creator">
+          <h3>Created By</h3>
+          <p>LegalSakhi is created by <strong>Vaishnavi Shahane</strong>, with a vision to make legal support more accessible, trustworthy, and life-saving for women across India.</p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function FindAdvocatesPage() {
+  const advocates = [
+    {
+      name: "Vaishnavi Shahane",
+      skills: "Family Law, Criminal Defense",
+      languages: "English, Marathi, Hindi",
+      exp: "8 Years",
+      price: "Free",
+      consults: "2k+ consultations",
+      rating: 5,
+      image: "https://i.pravatar.cc/150?img=1"
+    },
+    {
+      name: "Mayuri Landage",
+      skills: "Cyber Law, Women's Rights",
+      languages: "English, Marathi",
+      exp: "5 Years",
+      price: "Free",
+      consults: "1.5k+ consultations",
+      rating: 5,
+      image: "https://i.pravatar.cc/150?img=5"
+    },
+    {
+      name: "Shravani Pampatvar",
+      skills: "Property Law, Civil Litigation",
+      languages: "English, Hindi, Telugu",
+      exp: "12 Years",
+      price: "Free",
+      consults: "4k+ consultations",
+      rating: 4.8,
+      image: "https://i.pravatar.cc/150?img=9"
+    },
+    {
+      name: "Priya Sharma",
+      skills: "Corporate Law, Workplace Harassment",
+      languages: "English, Hindi",
+      exp: "6 Years",
+      price: "Free",
+      consults: "800+ consultations",
+      rating: 4.9,
+      image: "https://i.pravatar.cc/150?img=20"
+    },
+    {
+      name: "Anjali Deshmukh",
+      skills: "Domestic Violence, Divorce",
+      languages: "Marathi, English",
+      exp: "10 Years",
+      price: "Free",
+      consults: "3k+ consultations",
+      rating: 5,
+      image: "https://i.pravatar.cc/150?img=32"
+    },
+    {
+      name: "Kavita Reddy",
+      skills: "Human Rights, NGO Support",
+      languages: "English, Kannada, Hindi",
+      exp: "15 Years",
+      price: "Pro Bono (Free)",
+      consults: "5k+ consultations",
+      rating: 4.7,
+      image: "https://i.pravatar.cc/150?img=44"
+    }
+  ];
+
+  return (
+    <div className="find-advocates-page">
+      <div className="advocates-header-banner">
+        <h2>Chat with Advocate</h2>
+        <div className="advocates-logo-mini">
+           <FaBalanceScale size={24} color="#002e5b"/>
+        </div>
+      </div>
+      
+      <div className="advocates-filter-bar">
+        <div className="adv-search">
+          <FaSearch color="#666" />
+          <input type="text" placeholder="Search name..." />
+        </div>
+        <button className="adv-filter-btn"><FaFilter /> Filter</button>
+        <div className="adv-categories-scroll">
+          <button className="adv-category active">All</button>
+          <button className="adv-category">Family Law</button>
+          <button className="adv-category">Criminal Defense</button>
+          <button className="adv-category">Cyber Law</button>
+          <button className="adv-category">Property</button>
+          <button className="adv-category">Workplace Harassment</button>
+          <button className="adv-category">Women's Rights</button>
+        </div>
+      </div>
+
+      <div className="advocates-grid-layout">
+        {advocates.map((adv, idx) => (
+          <div className="advocate-astrotalk-card" key={idx}>
+            <div className="adv-card-top">
+              <img src={adv.image} alt={adv.name} className="adv-avatar" />
+              <div className="adv-info-main">
+                <div className="adv-name-row">
+                  <h3>{adv.name}</h3>
+                  <FaCheckCircle className="verified-icon" />
+                </div>
+                <p className="adv-skills">{adv.skills}</p>
+                <p className="adv-languages">{adv.languages}</p>
+                <div className="adv-rating-row">
+                  <div className="stars">
+                    <FaStar/><FaStar/><FaStar/><FaStar/><FaStar/>
+                  </div>
+                  <span className="consults-text">{adv.consults}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="adv-card-bottom">
+              <div className="adv-exp-price">
+                <p>Exp: {adv.exp}</p>
+                <p className="adv-price"><strong>{adv.price}</strong></p>
+              </div>
+              <button className="adv-chat-btn">Chat</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EmergencyPage() {
+  const helplines = [
+    { name: "Women Helpline (All India)", number: "1091", icon: <FaPhoneAlt /> },
+    { name: "Police Emergency", number: "112", icon: <FaUserShield /> },
+    { name: "Cyber Crime Helpline", number: "1930", icon: <FaSearch /> },
+    { name: "Domestic Abuse (NCW)", number: "7827170170", icon: <FaHandsHelping /> },
+    { name: "Ambulance", number: "108", icon: <FaPlusSquare /> },
+    { name: "Legal Aid / NALSA", number: "15100", icon: <FaBalanceScale /> }
+  ];
+
+  return (
+    <div className="generic-page-container">
+      <div className="emergency-header">
+        <h1>🚨 Emergency Help</h1>
+        <p>If you are in immediate danger, please call the police or emergency services immediately. Do not hesitate.</p>
+      </div>
+      <div className="emergency-grid">
+        {helplines.map((hp, idx) => (
+          <div className="emergency-card" key={idx}>
+            <div className="hp-icon">{hp.icon}</div>
+            <div className="hp-info">
+              <h3>{hp.name}</h3>
+              <a href={`tel:${hp.number}`} className="hp-number">{hp.number}</a>
+            </div>
+            <a href={`tel:${hp.number}`} className="hp-call-btn">Call Now</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Ensure FaPlusSquare is available or use another icon if not imported.
+// Actually let's use a standard component approach for Schemes
+function SchemesPage() {
+  const schemes = [
+    { title: "One Stop Centre (OSC)", desc: "Provides integrated support and assistance to women affected by violence, both in private and public spaces." },
+    { title: "Women Helpline Scheme", desc: "A 24-hour emergency and non-emergency response to women affected by violence." },
+    { title: "Ujjawala Scheme", desc: "A comprehensive scheme for prevention of trafficking and rescue, rehabilitation, reintegration, and repatriation of victims." },
+    { title: "Swadhar Greh", desc: "Provides temporary accommodation, maintenance, and rehabilitative services to women and girls rendered homeless due to family discord, crime, or violence." }
+  ];
+
+  return (
+    <div className="generic-page-container">
+      <div className="page-header-banner">
+        <h2>Schemes & Support Programs</h2>
+        <p>Government initiatives to empower and protect women across the nation.</p>
+      </div>
+      <div className="schemes-grid">
+        {schemes.map((scheme, idx) => (
+          <div className="scheme-card" key={idx}>
+            <div className="scheme-icon"><FaHandsHelping size={30}/></div>
+            <h3>{scheme.title}</h3>
+            <p>{scheme.desc}</p>
+            <button className="read-more-btn">Read More</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MediaPage() {
+  return (
+    <div className="generic-page-container">
+      <div className="page-header-banner">
+        <h2>Media & News Gallery</h2>
+        <p>Latest updates, news, and video resources on women's empowerment.</p>
+      </div>
+      <div className="media-grid">
+        {[1,2,3,4,5,6].map((item) => (
+          <div className="media-card" key={item}>
+            <div className="media-placeholder">
+              <FaPlayCircle size={40} color="#ddd" />
+            </div>
+            <div className="media-info">
+              <h4>Empowerment Campaign #{item}</h4>
+              <p>Government launches new initiative for digital literacy among women.</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ContactPage() {
+  return (
+    <div className="generic-page-container">
+      <div className="page-header-banner">
+        <h2>Contact Us</h2>
+        <p>We are here to help. Reach out to us for any queries or assistance.</p>
+      </div>
+      <div className="contact-layout">
+        <div className="contact-info">
+          <h3>Get In Touch</h3>
+          <p><strong>Address:</strong> LigalSakhi Headquarters,M.B.E. Society's College of Engineering,Ambajogai 431517</p>
+          <p><strong>Email:</strong> ligalsakhi@gmail.com</p>
+          <p><strong>Phone:</strong> +91 9370904695</p>
+          <p><strong>Hours:</strong> Mon - Sat (9:00 AM to 6:00 PM)</p>
+        </div>
+        <div className="contact-form">
+          <h3>Send a Message</h3>
+          <input type="text" placeholder="Your Name" />
+          <input type="email" placeholder="Your Email" />
+          <textarea placeholder="Your Message" rows="5"></textarea>
+          <button className="btn-dark">Submit</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="footer-top-section">
+        <div className="footer-col">
+          <h4>LIGALSAKHI APPLICATIONS</h4>
+          <ul>
+            <li><a href="#">Complaints</a></li>
+            <li><a href="#">Complaint against NRI</a></li>
+            <li><a href="#">eProposal</a></li>
+            <li><a href="#">MIS for Acid Attack Victims</a></li>
+            <li><a href="#">Nation Wide Competition</a></li>
+            <li><a href="#">LigalSakhi Staff Login</a></li>
+            <li><a href="#">LigalSakhi Internship</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h4>QUICK LINKS</h4>
+          <ul>
+            <li><a href="#">Website Policies</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Web Information Manager</a></li>
+            <li><a href="#">Feedback</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">LigalSakhi Applications</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <div className="newsletter-section">
+            <h4>SUBSCRIBE OUR NEWSLETTER</h4>
+            <div className="newsletter-form">
+              <input type="email" placeholder="" />
+              <button>Subscribe</button>
+            </div>
+          </div>
+          <div className="follow-us-section">
+            <h4>FOLLOW US ON</h4>
+            <p>Our Social Media Networks</p>
+            <div className="footer-social-icons">
+              <a href="https://www.instagram.com/shahanevaishnavi162026" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="https://www.facebook.com/profile.php?id=61589661144564" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+              <a href="https://x.com/LigalSakhi" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+              <a href="#"><FaYoutube /></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="footer-bottom-section">
+        <div className="footer-copyright-info">
+          <p>© Content owned, updated and maintained by the LigalSakhi.</p>
+          <p>This website belongs to LigalSakhi, Government of Maharashtra.</p>
+          <p>Copyright © LigalSakhi 2026</p>
+        </div>
+        <div className="footer-stats-info">
+          <p>Last Update : 10 May 2026</p>
+          <p>Visitor No: <strong>39373915</strong></p>
+        </div>
+      </div>
+      <div className="footer-developer-info">
+        <p>Designed & Developed by : <strong>Vaishnavi Shahane</strong></p>
+      </div>
+    </footer>
+  );
+}
+
+function LegalResourcesPage() {
+  const articles = [
+    {
+      date: "May 23, 2026",
+      readTime: "5 min read",
+      issue: "Volume I Issue I",
+      title: "AI: A Threat to Privacy for Women?",
+      author: "Vaishnavi Shahane, LigalSakhi Research Wing",
+      excerpt: "CLICK HERE TO READ THE FULL RESEARCH PAPER"
+    },
+    {
+      date: "Jun 10, 2026",
+      readTime: "8 min read",
+      issue: "Volume I Issue II",
+      title: "Domestic Violence Act: A Critical Analysis",
+      author: "Mayuri Landage, Expert in Family Law",
+      excerpt: "CLICK HERE TO READ THE FULL RESEARCH PAPER"
+    },
+    {
+      date: "Jul 05, 2026",
+      readTime: "6 min read",
+      issue: "Volume II Issue I",
+      title: "Cyber Harassment and Legal Remedies in India",
+      author: "Shravani Pampatvar, Cyber Law Specialist",
+      excerpt: "CLICK HERE TO READ THE FULL RESEARCH PAPER"
+    }
+  ];
+
+  return (
+    <div className="legal-resources-page">
+      <div className="resources-nav-bar">
+        <button className="res-nav-link active">All Posts</button>
+        <button className="res-nav-link">Volume I Issue I</button>
+        <button className="res-nav-link">Volume I Issue II</button>
+        <button className="res-nav-link">Volume II Issue I</button>
+        <div className="res-nav-more dropdown-container">
+           <span>More</span>
+           <span>▼</span>
+           <div className="dropdown-menu">
+             <button className="dropdown-item">Volume III Issue II</button>
+             <button className="dropdown-item">Volume IV Issue I</button>
+             <button className="dropdown-item">Volume IV Issue II</button>
+             <button className="dropdown-item">Volume IV Issue III</button>
+             <button className="dropdown-item">Volume IV Issue IV</button>
+             <button className="dropdown-item">Volume IV Issue V</button>
+             <button className="dropdown-item">Volume IV Issue VI</button>
+             <button className="dropdown-item">Volume V Issue I</button>
+             <button className="dropdown-item">Volume V Issue II</button>
+             <button className="dropdown-item">Volume V Issue III</button>
+           </div>
+        </div>
+        <div className="res-nav-search">
+           <FaSearch />
+        </div>
+      </div>
+      
+      <div className="articles-list-container">
+        {articles.map((article, index) => (
+          <div className="article-card" key={index}>
+             <div className="article-header">
+                <div className="article-meta">
+                   <span className="journal-name">LigalSakhi Journal</span>
+                   <br/>
+                   <span className="journal-date">{article.date} • {article.readTime}</span>
+                </div>
+                <div className="article-options">
+                   <FaEllipsisV />
+                </div>
+             </div>
+             <div className="article-body">
+                <p className="article-issue"><strong>{article.issue}</strong></p>
+                <h2 className="article-title">{article.title}</h2>
+                <p className="article-excerpt">
+                  {article.author} <a href="#" className="read-full-link">{article.excerpt}</a>
+                </p>
+             </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
