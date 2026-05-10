@@ -1,4 +1,4 @@
-# Ligal Sakhi
+# LigalSakhi
 
 A React frontend project for the Women Helper UI. This repository currently includes the main UI component and generated favicon assets.
 
