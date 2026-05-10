@@ -761,7 +761,7 @@ function Footer() {
             <h4>FOLLOW US ON</h4>
             <p>Our Social Media Networks</p>
             <div className="footer-social-icons">
-              <a href="https://www.instagram.com/shahanevaishnavi162026" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="https://www.instagram.com/legalsakhi.in" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
               <a href="https://www.facebook.com/profile.php?id=61589661144564" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
               <a href="https://x.com/LigalSakhi" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
               <a href="#"><FaYoutube /></a>
