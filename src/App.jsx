@@ -372,6 +372,11 @@ function AboutPage() {
 }
 
 function FindAdvocatesPage() {
+  const [selectedAdvocate, setSelectedAdvocate] = useState(null);
+  const [activeChat, setActiveChat] = useState(null);
+  const [isChatMinimized, setIsChatMinimized] = useState(false);
+  const [isChatMaximized, setIsChatMaximized] = useState(false);
+
   const advocates = [
     {
       name: "Vaishnavi Shahane",
@@ -381,7 +386,12 @@ function FindAdvocatesPage() {
       price: "Free",
       consults: "2k+ consultations",
       rating: 5,
-      image: "https://i.pravatar.cc/150?img=1"
+      image: "https://i.pravatar.cc/150?img=1",
+      bio: "I am a dedicated Family Law and Criminal Defense attorney with over 8 years of experience fighting for women's rights and domestic justice. I believe in empathetic, accessible, and fierce representation.",
+      reviews: [
+        { user: "Priya S.", rating: 5, comment: "Very helpful and understanding. Guided me through my divorce smoothly." },
+        { user: "Anita R.", rating: 5, comment: "Excellent lawyer, highly recommended for criminal defense." }
+      ]
     },
     {
       name: "Mayuri Landage",
@@ -391,7 +401,12 @@ function FindAdvocatesPage() {
       price: "Free",
       consults: "1.5k+ consultations",
       rating: 5,
-      image: "https://i.pravatar.cc/150?img=5"
+      image: "https://i.pravatar.cc/150?img=5",
+      bio: "Specializing in cybercrime and online harassment. I help women navigate the complexities of digital safety and hold perpetrators accountable under IT laws.",
+      reviews: [
+        { user: "Sneha M.", rating: 5, comment: "Helped me remove fake profiles and filed an FIR successfully." },
+        { user: "Kiran D.", rating: 5, comment: "Very prompt and professional." }
+      ]
     },
     {
       name: "Shravani Pampatvar",
@@ -401,7 +416,12 @@ function FindAdvocatesPage() {
       price: "Free",
       consults: "4k+ consultations",
       rating: 4.8,
-      image: "https://i.pravatar.cc/150?img=9"
+      image: "https://i.pravatar.cc/150?img=9",
+      bio: "Expert in property disputes, inheritance rights, and civil litigation. Ensuring women get their rightful share and legal protection in property matters.",
+      reviews: [
+        { user: "Lakshmi K.", rating: 5, comment: "Got my ancestral property share. Very knowledgeable." },
+        { user: "Ritu", rating: 4, comment: "Good lawyer but very busy." }
+      ]
     },
     {
       name: "Priya Sharma",
@@ -411,7 +431,11 @@ function FindAdvocatesPage() {
       price: "Free",
       consults: "800+ consultations",
       rating: 4.9,
-      image: "https://i.pravatar.cc/150?img=20"
+      image: "https://i.pravatar.cc/150?img=20",
+      bio: "Dedicated to fighting workplace harassment and ensuring safe corporate environments. POSH expert.",
+      reviews: [
+        { user: "Neha", rating: 5, comment: "She handled my POSH complaint very sensitively." }
+      ]
     },
     {
       name: "Anjali Deshmukh",
@@ -421,7 +445,12 @@ function FindAdvocatesPage() {
       price: "Free",
       consults: "3k+ consultations",
       rating: 5,
-      image: "https://i.pravatar.cc/150?img=32"
+      image: "https://i.pravatar.cc/150?img=32",
+      bio: "Compassionate approach to difficult family situations. Focused on quick resolutions and child custody safety.",
+      reviews: [
+        { user: "Swati", rating: 5, comment: "A true lifesaver. Handled my case with utmost care." },
+        { user: "Pooja", rating: 5, comment: "Highly recommend for domestic violence cases." }
+      ]
     },
     {
       name: "Kavita Reddy",
@@ -431,7 +460,12 @@ function FindAdvocatesPage() {
       price: "Pro Bono (Free)",
       consults: "5k+ consultations",
       rating: 4.7,
-      image: "https://i.pravatar.cc/150?img=44"
+      image: "https://i.pravatar.cc/150?img=44",
+      bio: "Working with multiple NGOs to provide free legal aid to marginalized women. Decades of experience in human rights advocacy.",
+      reviews: [
+        { user: "Rani", rating: 5, comment: "She fights for the poor. God bless her." },
+        { user: "Sushma", rating: 4, comment: "Very supportive." }
+      ]
     }
   ];
 
@@ -463,7 +497,7 @@ function FindAdvocatesPage() {
 
       <div className="advocates-grid-layout">
         {advocates.map((adv, idx) => (
-          <div className="advocate-astrotalk-card" key={idx}>
+          <div className="advocate-astrotalk-card" key={idx} onClick={() => setSelectedAdvocate(adv)}>
             <div className="adv-card-top">
               <img src={adv.image} alt={adv.name} className="adv-avatar" />
               <div className="adv-info-main">
@@ -487,11 +521,89 @@ function FindAdvocatesPage() {
                 <p>Exp: {adv.exp}</p>
                 <p className="adv-price"><strong>{adv.price}</strong></p>
               </div>
-              <button className="adv-chat-btn">Chat</button>
+              <button className="adv-chat-btn" onClick={(e) => { e.stopPropagation(); setActiveChat(adv); }}>Chat</button>
             </div>
           </div>
         ))}
       </div>
+
+      {selectedAdvocate && (
+        <div className="modal-overlay" onClick={() => setSelectedAdvocate(null)}>
+          <div className="profile-modal" onClick={e => e.stopPropagation()}>
+            <button className="close-modal-btn" onClick={() => setSelectedAdvocate(null)}>&times;</button>
+            <div className="profile-modal-header">
+              <img src={selectedAdvocate.image} alt={selectedAdvocate.name} />
+              <div>
+                <h2>{selectedAdvocate.name} <FaCheckCircle className="verified-icon" /></h2>
+                <p>{selectedAdvocate.skills}</p>
+                <div className="adv-rating-row" style={{ marginTop: '8px' }}>
+                  <div className="stars">
+                    <FaStar/><FaStar/><FaStar/><FaStar/><FaStar/>
+                  </div>
+                  <span className="consults-text">{selectedAdvocate.rating} / 5 Rating</span>
+                </div>
+              </div>
+            </div>
+            <div className="profile-modal-body">
+              <h3>About Advocate</h3>
+              <p className="adv-bio">{selectedAdvocate.bio}</p>
+              
+              <h3 style={{ marginTop: '25px', marginBottom: '15px' }}>Client Reviews</h3>
+              <div className="reviews-list">
+                {selectedAdvocate.reviews.map((rev, i) => (
+                  <div key={i} className="review-item">
+                    <div className="review-header">
+                      <strong>{rev.user}</strong>
+                      <div className="stars">
+                        {[...Array(rev.rating)].map((_, idx) => <FaStar key={idx} />)}
+                      </div>
+                    </div>
+                    <p>{rev.comment}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="profile-modal-footer">
+               <button className="adv-chat-btn-solid" onClick={() => { setActiveChat(selectedAdvocate); setSelectedAdvocate(null); }}>Start Free Chat</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeChat && (
+        <div className={`chat-widget ${isChatMinimized ? 'minimized' : ''} ${isChatMaximized ? 'maximized' : ''}`}>
+          <div className="chat-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+               <img src={activeChat.image} alt={activeChat.name} style={{ width: '35px', height: '35px', borderRadius: '50%', border: '2px solid white' }} />
+               <h4>{activeChat.name}</h4>
+            </div>
+            <div className="chat-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <button className="chat-action-btn" onClick={() => { setIsChatMinimized(!isChatMinimized); setIsChatMaximized(false); }} title="Minimize">
+                {isChatMinimized ? '▲' : '▼'}
+              </button>
+              {!isChatMinimized && (
+                <button className="chat-action-btn" onClick={() => setIsChatMaximized(!isChatMaximized)} title="Maximize">
+                  {isChatMaximized ? '❐' : '□'}
+                </button>
+              )}
+              <button className="chat-action-btn close" onClick={() => { setActiveChat(null); setIsChatMinimized(false); setIsChatMaximized(false); }} title="Close" style={{ fontSize: '20px' }}>&times;</button>
+            </div>
+          </div>
+          {!isChatMinimized && (
+            <>
+              <div className="chat-body">
+                <div className="chat-message received">
+                  Hello! I am {activeChat.name}. I am here to help you. Please feel free to share your concerns. Everything you share is completely confidential.
+                </div>
+              </div>
+              <div className="chat-footer">
+                <input type="text" placeholder="Type a message..." />
+                <button>Send</button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
