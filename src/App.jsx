@@ -20,7 +20,7 @@ export default function App() {
             <ActionGrid />
           </div>
 
-          <LigalSakhiCells />
+          <LegalSakhiCells />
           <SuccessStories />
         </>
       )}
@@ -55,10 +55,10 @@ function Header({ setCurrentPage }) {
       </div>
       <div className="top-header">
         <div className="header-logos" style={{ cursor: 'pointer' }} onClick={() => setCurrentPage('home')}>
-          <img src="/LigalSakhiLogo.png" alt="LigalSakhi Logo" className="brand-logo" />
+          <img src="/LegalSakhiLogo.png" alt="LegalSakhi Logo" className="brand-logo" />
           <div>
             <h1>महिला सहायता एवं कानूनी सहयोग</h1>
-            <span className="subtitle">LigalSakhi - Women Helper & Legal Advocate Finder</span>
+            <span className="subtitle">LegalSakhi - Women Helper & Legal Advocate Finder</span>
             <span className="sub-subtitle">Government of Maharashtra Initiative</span>
           </div>
         </div>
@@ -89,7 +89,7 @@ function SocialSidebar() {
   return (
     <div className="social-sidebar">
       <a href="https://www.facebook.com/profile.php?id=61589661144564" target="_blank" rel="noopener noreferrer" className="fb"><FaFacebookF /></a>
-      <a href="https://x.com/LigalSakhi" target="_blank" rel="noopener noreferrer" className="x"><FaTwitter /></a>
+      <a href="https://x.com/LegalSakhi" target="_blank" rel="noopener noreferrer" className="x"><FaTwitter /></a>
       <a href="https://www.instagram.com/shahanevaishnavi162026" target="_blank" rel="noopener noreferrer" className="ig"><FaInstagram /></a>
       <a href="#" className="yt"><FaYoutube /></a>
     </div>
@@ -180,11 +180,11 @@ function ActionGrid() {
   );
 }
 
-function LigalSakhiCells() {
+function LegalSakhiCells() {
   return (
-    
+
     <div className="ncw-cells">
-      <h2>LigalSakhi Cells</h2>
+      <h2>LegalSakhi Cells</h2>
       <div className="cells-grid">
         <div className="cell-card c-1"><span style={{ background: '#b74bd4', color: 'white', padding: '8px', borderRadius: '50%' }}><FaPhoneAlt size={14} /></span> Complaint Redressal</div>
         <div className="cell-card c-2"><span style={{ background: '#c59918', color: 'white', padding: '8px', borderRadius: '50%' }}><FaBriefcase size={14} /></span> Policy Monitoring</div>
@@ -238,7 +238,7 @@ function UserLogin({ setCurrentPage }) {
     <div className="login-page">
       <div className="login-card">
         <div className="login-left user-bg">
-          <h2>{isSignUp ? "Join LigalSakhi" : "Welcome Back!"}</h2>
+          <h2>{isSignUp ? "Join LegalSakhi" : "Welcome Back!"}</h2>
           <p>Access legal resources and find trusted advocates near you.</p>
         </div>
         <div className="login-right">
@@ -294,7 +294,7 @@ function AboutPage() {
         <h1>About LegalSakhi</h1>
         <p>A compassionate, women-centric legal assistance platform built with one clear purpose: to support and protect women, girls, and female students.</p>
       </div>
-      
+
       <div className="about-body">
         <section className="about-text-block">
           <p>We understand that legal problems often appear during the most stressful and vulnerable moments of a woman’s life. Whether it is domestic violence, sexual harassment, stalking, cyberbullying, assault, or workplace discrimination, victims often don’t know who to trust, where to go, or how to begin the legal process. LegalSakhi was created to solve exactly this problem.</p>
@@ -474,10 +474,10 @@ function FindAdvocatesPage() {
       <div className="advocates-header-banner">
         <h2>Chat with Advocate</h2>
         <div className="advocates-logo-mini">
-           <FaBalanceScale size={24} color="#002e5b"/>
+          <FaBalanceScale size={24} color="#002e5b" />
         </div>
       </div>
-      
+
       <div className="advocates-filter-bar">
         <div className="adv-search">
           <FaSearch color="#666" />
@@ -509,13 +509,13 @@ function FindAdvocatesPage() {
                 <p className="adv-languages">{adv.languages}</p>
                 <div className="adv-rating-row">
                   <div className="stars">
-                    <FaStar/><FaStar/><FaStar/><FaStar/><FaStar/>
+                    <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
                   </div>
                   <span className="consults-text">{adv.consults}</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="adv-card-bottom">
               <div className="adv-exp-price">
                 <p>Exp: {adv.exp}</p>
@@ -538,7 +538,7 @@ function FindAdvocatesPage() {
                 <p>{selectedAdvocate.skills}</p>
                 <div className="adv-rating-row" style={{ marginTop: '8px' }}>
                   <div className="stars">
-                    <FaStar/><FaStar/><FaStar/><FaStar/><FaStar/>
+                    <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
                   </div>
                   <span className="consults-text">{selectedAdvocate.rating} / 5 Rating</span>
                 </div>
@@ -547,7 +547,7 @@ function FindAdvocatesPage() {
             <div className="profile-modal-body">
               <h3>About Advocate</h3>
               <p className="adv-bio">{selectedAdvocate.bio}</p>
-              
+
               <h3 style={{ marginTop: '25px', marginBottom: '15px' }}>Client Reviews</h3>
               <div className="reviews-list">
                 {selectedAdvocate.reviews.map((rev, i) => (
@@ -564,7 +564,7 @@ function FindAdvocatesPage() {
               </div>
             </div>
             <div className="profile-modal-footer">
-               <button className="adv-chat-btn-solid" onClick={() => { setActiveChat(selectedAdvocate); setSelectedAdvocate(null); }}>Start Free Chat</button>
+              <button className="adv-chat-btn-solid" onClick={() => { setActiveChat(selectedAdvocate); setSelectedAdvocate(null); }}>Start Free Chat</button>
             </div>
           </div>
         </div>
@@ -574,8 +574,8 @@ function FindAdvocatesPage() {
         <div className={`chat-widget ${isChatMinimized ? 'minimized' : ''} ${isChatMaximized ? 'maximized' : ''}`}>
           <div className="chat-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-               <img src={activeChat.image} alt={activeChat.name} style={{ width: '35px', height: '35px', borderRadius: '50%', border: '2px solid white' }} />
-               <h4>{activeChat.name}</h4>
+              <img src={activeChat.image} alt={activeChat.name} style={{ width: '35px', height: '35px', borderRadius: '50%', border: '2px solid white' }} />
+              <h4>{activeChat.name}</h4>
             </div>
             <div className="chat-header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <button className="chat-action-btn" onClick={() => { setIsChatMinimized(!isChatMinimized); setIsChatMaximized(false); }} title="Minimize">
@@ -659,7 +659,7 @@ function SchemesPage() {
       <div className="schemes-grid">
         {schemes.map((scheme, idx) => (
           <div className="scheme-card" key={idx}>
-            <div className="scheme-icon"><FaHandsHelping size={30}/></div>
+            <div className="scheme-icon"><FaHandsHelping size={30} /></div>
             <h3>{scheme.title}</h3>
             <p>{scheme.desc}</p>
             <button className="read-more-btn">Read More</button>
@@ -678,7 +678,7 @@ function MediaPage() {
         <p>Latest updates, news, and video resources on women's empowerment.</p>
       </div>
       <div className="media-grid">
-        {[1,2,3,4,5,6].map((item) => (
+        {[1, 2, 3, 4, 5, 6].map((item) => (
           <div className="media-card" key={item}>
             <div className="media-placeholder">
               <FaPlayCircle size={40} color="#ddd" />
@@ -704,8 +704,8 @@ function ContactPage() {
       <div className="contact-layout">
         <div className="contact-info">
           <h3>Get In Touch</h3>
-          <p><strong>Address:</strong> LigalSakhi Headquarters,M.B.E. Society's College of Engineering,Ambajogai 431517</p>
-          <p><strong>Email:</strong> ligalsakhi@gmail.com</p>
+          <p><strong>Address:</strong> LegalSakhi Headquarters,M.B.E. Society's College of Engineering,Ambajogai 431517</p>
+          <p><strong>Email:</strong> legalsakhi@gmail.com</p>
           <p><strong>Phone:</strong> +91 9370904695</p>
           <p><strong>Hours:</strong> Mon - Sat (9:00 AM to 6:00 PM)</p>
         </div>
@@ -726,15 +726,15 @@ function Footer() {
     <footer className="site-footer">
       <div className="footer-top-section">
         <div className="footer-col">
-          <h4>LIGALSAKHI APPLICATIONS</h4>
+          <h4>LEGALSAKHI APPLICATIONS</h4>
           <ul>
             <li><a href="#">Complaints</a></li>
             <li><a href="#">Complaint against NRI</a></li>
             <li><a href="#">eProposal</a></li>
             <li><a href="#">MIS for Acid Attack Victims</a></li>
             <li><a href="#">Nation Wide Competition</a></li>
-            <li><a href="#">LigalSakhi Staff Login</a></li>
-            <li><a href="#">LigalSakhi Internship</a></li>
+            <li><a href="#">LegalSakhi Staff Login</a></li>
+            <li><a href="#">LegalSakhi Internship</a></li>
           </ul>
         </div>
         <div className="footer-col">
@@ -746,7 +746,7 @@ function Footer() {
             <li><a href="#">Web Information Manager</a></li>
             <li><a href="#">Feedback</a></li>
             <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">LigalSakhi Applications</a></li>
+            <li><a href="#">LegalSakhi Applications</a></li>
           </ul>
         </div>
         <div className="footer-col">
@@ -769,12 +769,12 @@ function Footer() {
           </div>
         </div>
       </div>
-      
+
       <div className="footer-bottom-section">
         <div className="footer-copyright-info">
-          <p>© Content owned, updated and maintained by the LigalSakhi.</p>
-          <p>This website belongs to LigalSakhi, Government of Maharashtra.</p>
-          <p>Copyright © LigalSakhi 2026</p>
+          <p>© Content owned, updated and maintained by the LegalSakhi.</p>
+          <p>This website belongs to LegalSakhi, Government of Maharashtra.</p>
+          <p>Copyright © LegalSakhi 2026</p>
         </div>
         <div className="footer-stats-info">
           <p>Last Update : 10 May 2026</p>
@@ -795,7 +795,7 @@ function LegalResourcesPage() {
       readTime: "5 min read",
       issue: "Volume I Issue I",
       title: "AI: A Threat to Privacy for Women?",
-      author: "Vaishnavi Shahane, LigalSakhi Research Wing",
+      author: "Vaishnavi Shahane, LegalSakhi Research Wing",
       excerpt: "CLICK HERE TO READ THE FULL RESEARCH PAPER"
     },
     {
@@ -824,46 +824,46 @@ function LegalResourcesPage() {
         <button className="res-nav-link">Volume I Issue II</button>
         <button className="res-nav-link">Volume II Issue I</button>
         <div className="res-nav-more dropdown-container">
-           <span>More</span>
-           <span>▼</span>
-           <div className="dropdown-menu">
-             <button className="dropdown-item">Volume III Issue II</button>
-             <button className="dropdown-item">Volume IV Issue I</button>
-             <button className="dropdown-item">Volume IV Issue II</button>
-             <button className="dropdown-item">Volume IV Issue III</button>
-             <button className="dropdown-item">Volume IV Issue IV</button>
-             <button className="dropdown-item">Volume IV Issue V</button>
-             <button className="dropdown-item">Volume IV Issue VI</button>
-             <button className="dropdown-item">Volume V Issue I</button>
-             <button className="dropdown-item">Volume V Issue II</button>
-             <button className="dropdown-item">Volume V Issue III</button>
-           </div>
+          <span>More</span>
+          <span>▼</span>
+          <div className="dropdown-menu">
+            <button className="dropdown-item">Volume III Issue II</button>
+            <button className="dropdown-item">Volume IV Issue I</button>
+            <button className="dropdown-item">Volume IV Issue II</button>
+            <button className="dropdown-item">Volume IV Issue III</button>
+            <button className="dropdown-item">Volume IV Issue IV</button>
+            <button className="dropdown-item">Volume IV Issue V</button>
+            <button className="dropdown-item">Volume IV Issue VI</button>
+            <button className="dropdown-item">Volume V Issue I</button>
+            <button className="dropdown-item">Volume V Issue II</button>
+            <button className="dropdown-item">Volume V Issue III</button>
+          </div>
         </div>
         <div className="res-nav-search">
-           <FaSearch />
+          <FaSearch />
         </div>
       </div>
-      
+
       <div className="articles-list-container">
         {articles.map((article, index) => (
           <div className="article-card" key={index}>
-             <div className="article-header">
-                <div className="article-meta">
-                   <span className="journal-name">LigalSakhi Journal</span>
-                   <br/>
-                   <span className="journal-date">{article.date} • {article.readTime}</span>
-                </div>
-                <div className="article-options">
-                   <FaEllipsisV />
-                </div>
-             </div>
-             <div className="article-body">
-                <p className="article-issue"><strong>{article.issue}</strong></p>
-                <h2 className="article-title">{article.title}</h2>
-                <p className="article-excerpt">
-                  {article.author} <a href="#" className="read-full-link">{article.excerpt}</a>
-                </p>
-             </div>
+            <div className="article-header">
+              <div className="article-meta">
+                <span className="journal-name">LegalSakhi Journal</span>
+                <br />
+                <span className="journal-date">{article.date} • {article.readTime}</span>
+              </div>
+              <div className="article-options">
+                <FaEllipsisV />
+              </div>
+            </div>
+            <div className="article-body">
+              <p className="article-issue"><strong>{article.issue}</strong></p>
+              <h2 className="article-title">{article.title}</h2>
+              <p className="article-excerpt">
+                {article.author} <a href="#" className="read-full-link">{article.excerpt}</a>
+              </p>
+            </div>
           </div>
         ))}
       </div>
