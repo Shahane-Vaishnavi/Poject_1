@@ -55,7 +55,7 @@ function Header({ setCurrentPage }) {
       </div>
       <div className="top-header">
         <div className="header-logos" style={{ cursor: 'pointer' }} onClick={() => setCurrentPage('home')}>
-          <img src="/LegalSakhiLogo.png" alt="LegalSakhi Logo" className="brand-logo" />
+          <img src="/LigalSakhiLogo.png" alt="LegalSakhi Logo" className="brand-logo" />
           <div>
             <h1>महिला सहायता एवं कानूनी सहयोग</h1>
             <span className="subtitle">LegalSakhi - Women Helper & Legal Advocate Finder</span>
