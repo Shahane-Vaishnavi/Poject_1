@@ -50,16 +50,15 @@ function Header({ setCurrentPage }) {
           Skip to Main Content | Screen Reader Access | हिंदी | मराठी
         </div>
         <div className="right-links">
-          Last Updated: 08 May 2026 | Visitor No: 12,47,839
+          Last Updated: 14 May 2026 | Visitor No: 12,47,839
         </div>
       </div>
       <div className="top-header">
         <div className="header-logos" style={{ cursor: 'pointer' }} onClick={() => setCurrentPage('home')}>
           <img src="/LigalSakhiLogo.png" alt="LegalSakhi Logo" className="brand-logo" />
           <div>
-            <h1>महिला सहायता एवं कानूनी सहयोग</h1>
-            <span className="subtitle">LegalSakhi - Women Helper & Legal Advocate Finder</span>
-            <span className="sub-subtitle">Turning Her Silence into Strength.</span>
+            
+            
           </div>
         </div>
         <div className="search-and-login">
@@ -168,6 +167,7 @@ function WhatsNew() {
   );
 }
 
+//Shude i remove this or not? (i think i will remove this function)
 function ActionGrid() {
   return (
     <div className="action-grid">
