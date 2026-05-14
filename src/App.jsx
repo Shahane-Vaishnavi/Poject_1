@@ -57,8 +57,9 @@ function Header({ setCurrentPage }) {
         <div className="header-logos" style={{ cursor: 'pointer' }} onClick={() => setCurrentPage('home')}>
           <img src="/LigalSakhiLogo.png" alt="LegalSakhi Logo" className="brand-logo" />
           <div>
-            
-            
+            <h1>महिला सहायता एवं कानूनी सहयोग</h1>
+            <span className="subtitle">LegalSakhi - Women Helper & Legal Advocate Finder</span>
+            <span className="sub-subtitle">Turning Her Silence into Strength.</span>
           </div>
         </div>
         <div className="search-and-login">
@@ -167,7 +168,7 @@ function WhatsNew() {
   );
 }
 
-//Shude i remove this or not? (i think i will remove this function)
+//Shude i remove this or not? (i think i will remove this funtion)
 function ActionGrid() {
   return (
     <div className="action-grid">
