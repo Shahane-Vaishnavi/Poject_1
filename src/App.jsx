@@ -46,7 +46,7 @@ function Header({ setCurrentPage }) {
   return (
     <header className="sticky-header">
       <div className="very-top-bar">
-        <div className="left-links">
+        <div className="left-links">  ``
           Skip to Main Content | Screen Reader Access | हिंदी | मराठी
         </div>
         <div className="right-links">
@@ -59,7 +59,7 @@ function Header({ setCurrentPage }) {
           <div>
             <h1>महिला सहायता एवं कानूनी सहयोग</h1>
             <span className="subtitle">LegalSakhi - Women Helper & Legal Advocate Finder</span>
-            <span className="sub-subtitle">Government of Maharashtra Initiative</span>
+            <span className="sub-subtitle">Turning Her Silence into Strength.</span>
           </div>
         </div>
         <div className="search-and-login">
