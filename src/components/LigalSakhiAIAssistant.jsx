@@ -15,69 +15,252 @@ import {
   FaUserShield,
   FaCheckCircle,
   FaArrowRight,
-  FaFolderOpen
+  FaFolderOpen,
+  FaExpand,
+  FaCompress
 } from "react-icons/fa";
 import "./LigalSakhiAIAssistant.css";
 
 const EMERGENCY_KEYWORDS = [
   "violence", "abuse", "threat", "harassment", "emergency", "beaten", "rape", 
   "assault", "hurt", "danger", "stalk", "blackmail", "suicide", "maar", "pitna", 
-  "dhanki", "gali", "chhedkhani", "pareshan", "cyber stalking", "dhamki", "attack"
+  "dhanki", "gali", "chhedkhani", "pareshan", "cyber stalking", "dhamki", "attack",
+  "हिंसा", "उत्पीड़न", "गाली", "धमकी", "मारपीट", "सुरक्षा", "छेडखानी", "त्रास", "कौटुंबिक हिंसाचार"
 ];
 
-const QUICK_ACTIONS = [
-  { label: "Cyber Crime", query: "How do I file a cyber crime complaint for online harassment?" },
-  { label: "Domestic Violence", query: "What protection is available under the Domestic Violence Act 2005?" },
-  { label: "FIR Help", query: "What is a Zero FIR and what if the police refuse to file an FIR?" },
-  { label: "Women's Rights", query: "What are my legal rights against workplace harassment (POSH)?" },
-  { label: "Find Advocate", query: "How do I find and connect with a verified advocate on LegalSakhi?" },
-  { label: "Emergency Support", query: "EMERGENCY: I need immediate legal helplines and safety resources!" }
-];
+const TRANSLATIONS = {
+  en: {
+    welcome: "Namaste! I am LigalSakhi AI, your secure legal companion. I am designed to assist women across India with direct legal awareness, cyber safety, domestic abuse support, FIR processes, and connecting with verified legal advocates. Everything you discuss here is completely confidential.",
+    welcomeHeader: "💡 How I can assist you:",
+    welcome1: "Women's Rights: POSH Act, Property rights, Free Legal Aid.",
+    welcome2: "Cyber Crime: Stalking, Privacy violations, Online Harassment.",
+    welcome3: "Domestic Violence: Protection orders, Residential rights, Aid resources.",
+    welcome4: "FIR Guidance: Registration steps, Zero FIRs, Police guidelines.",
+    welcome5: "Finding Advocates: Verified professional support directory.",
+    placeholder: "Describe your legal issue (e.g. harassment, stalking, rights)...",
+    listening: "Listening...",
+    disclaimer: "LigalSakhi AI provides immediate general legal information. For formal representation, use our 'Find Advocates' portal.",
+    clearChat: "Clear Chat",
+    emergencyTitle: "Emergency Legal & Safety Helplines",
+    emergencyDesc: "If you are in immediate danger, please contact emergency numbers right away.",
+    callPolice: "Call Police (112)",
+    womenHelpline: "Women Helpline (1091)",
+    mahaHelpline: "Maharashtra 181",
+    suggestedTray: "Suggested follow-ups:",
+    fallbackMsg: "Namaste. Thank you for reaching out. Please let me know how I can help.",
+    typingIndicator: "LigalSakhi is preparing trusted guidance...",
+    listenBtn: "Listen",
+    stopBtn: "Stop",
+    clearPrompt: "Are you sure you want to clear your confidential chat history with LigalSakhi AI?"
+  },
+  hi: {
+    welcome: "नमस्ते! मैं लीगलसखी एआई हूँ, आपकी सुरक्षित कानूनी साथी। मैं भारत भर में महिलाओं को प्रत्यक्ष कानूनी जागरूकता, साइबर सुरक्षा, घरेलू हिंसा सहायता, एफआईआर प्रक्रियाओं और सत्यापित कानूनी वकीलों से जुड़ने में मदद करने के लिए बनाई गई हूँ। हमारे बीच होने वाली सभी बातचीत पूरी तरह से गोपनीय है।",
+    welcomeHeader: "💡 मैं आपकी कैसे सहायता कर सकती हूँ:",
+    welcome1: "महिलाओं के अधिकार: पॉश (POSH) अधिनियम, संपत्ति के अधिकार, मुफ्त कानूनी सहायता।",
+    welcome2: "साइबर अपराध: ऑनलाइन पीछा करना (स्टॉकिंग), गोपनीयता का उल्लंघन, ऑनलाइन उत्पीड़न।",
+    welcome3: "घरेलू हिंसा: सुरक्षा आदेश, साझा निवास अधिकार, सहायता संसाधन।",
+    welcome4: "एफआईआर मार्गदर्शन: पंजीकरण के चरण, जीरो एफआईआर, पुलिस दिशानिर्देश।",
+    welcome5: "वकील ढूंढें: सत्यापित पेशेवर सहायता निर्देशिका।",
+    placeholder: "अपनी कानूनी समस्या का वर्णन करें (जैसे उत्पीड़न, पीछा करना, अधिकार)...",
+    listening: "सुन रहा हूँ...",
+    disclaimer: "लीगलसखी एआई तत्काल सामान्य कानूनी जानकारी प्रदान करता है। औपचारिक प्रतिनिधित्व के लिए, हमारे 'वकील ढूंढें' पोर्टल का उपयोग करें।",
+    clearChat: "चैट मिटाएं",
+    emergencyTitle: "आपातकालीन कानूनी और सुरक्षा हेल्पलाइन",
+    emergencyDesc: "यदि आप तत्काल खतरे में हैं, तो कृपया तुरंत आपातकालीन नंबरों पर संपर्क करें।",
+    callPolice: "पुलिस को कॉल करें (112)",
+    womenHelpline: "महिला हेल्पलाइन (1091)",
+    mahaHelpline: "महाराष्ट्र 181",
+    suggestedTray: "सुझाए गए अनुवर्ती प्रश्न:",
+    fallbackMsg: "नमस्ते। संपर्क करने के लिए धन्यवाद। कृपया मुझे बताएं कि मैं आपकी कैसे मदद कर सकती हूँ।",
+    typingIndicator: "लीगलसखी विश्वसनीय मार्गदर्शन तैयार कर रही है...",
+    listenBtn: "सुनें",
+    stopBtn: "रोकें",
+    clearPrompt: "क्या आप वाकई लीगलसखी एआई के साथ अपने गोपनीय चैट इतिहास को मिटाना चाहते हैं?"
+  },
+  mr: {
+    welcome: "नमस्कार! मी लीगलसखी एआय आहे, तुमची सुरक्षित कायदेशीर सोबती. मी संपूर्ण भारतातील महिलांना थेट कायदेशीर जागरूकता, सायबर सुरक्षा, कौटुंबिक हिंसाचार मदत, एफआयआर प्रक्रिया आणि प्रमाणित कायदेशीर वकीलांशी जोडण्यास मदत करण्यासाठी डिझाइन केली आहे. आपल्या मधील सर्व संभाषण पूर्णपणे गोपनीय आहे.",
+    welcomeHeader: "💡 मी तुम्हाला कशी मदत करू शकते:",
+    welcome1: "महिलांचे हक्क: पॉश (POSH) कायदा, मालमत्ता हक्क, मोफत कायदेशीर मदत.",
+    welcome2: "सायबर गुन्हे: ऑनलाइन पाठलाग करणे, गोपनीयतेचे उल्लंघन, ऑनलाइन छळ.",
+    welcome3: "कौटुंबिक हिंसाचार: संरक्षण आदेश, सामायिक गृहनिर्माण हक्क, मदत संसाधने.",
+    welcome4: "एफआयआर मार्गदर्शन: नोंदणीचे टप्पे, झिरो एफआयआर, पोलिस मार्गदर्शक तत्त्वे.",
+    welcome5: "वकील शोधा: प्रमाणित व्यावसायिक मदत निर्देशिका.",
+    placeholder: "तुमच्या कायदेशीर समस्येचे वर्णन करा (उदा. छळ, पाठलाग, हक्क)...",
+    listening: "ऐकत आहे...",
+    disclaimer: "लीगलसखी एआय त्वरित सामान्य कायदेशीर माहिती प्रदान करते. औपचारिक प्रतिनिधित्वासाठी, आमच्या 'वकील शोधा' पोर्टलचा वापर करा.",
+    clearChat: "चॅट पुसून टाका",
+    emergencyTitle: "आपातकालीन कायदेशीर आणि सुरक्षा हेल्पलाइन",
+    emergencyDesc: "जर तुम्ही तात्काळ धोक्यात असाल, तर कृपया ताबडतोब आपत्कालीन नंबरवर संपर्क साधा.",
+    callPolice: "पोलिसांना कॉल करा (112)",
+    womenHelpline: "महिला हेल्पलाइन (1091)",
+    mahaHelpline: "महाराष्ट्र 181",
+    suggestedTray: "सुचवलेले पुढील प्रश्न:",
+    fallbackMsg: "नमस्कार. संपर्क साधल्याबद्दल धन्यवाद. मी तुम्हाला कशी मदत करू शकते ते कृपया मला सांगा.",
+    typingIndicator: "लीगलसखी विश्वसनीय कायदेशीर मार्गदर्शन तयार करत आहे...",
+    listenBtn: "ऐका",
+    stopBtn: "थांबवा",
+    clearPrompt: "तुम्हाला खरोखर लीगलसखी एआय सोबतचा तुमचा गोपनीय चॅट इतिहास पुसून टाकायचा आहे का?"
+  }
+};
 
-const FOLLOW_UPS = {
-  cyber: [
-    "How do I report online stalking?",
-    "What is Section 66E of the IT Act?",
-    "Can I file a cyber complaint anonymously?"
-  ],
-  violence: [
-    "What is a Protection Order?",
-    "How do I contact a Protection Officer?",
-    "Is emotional and financial abuse covered?"
-  ],
-  fir: [
-    "What is a Zero FIR?",
-    "What if the police refuse my FIR?",
-    "Do I have to pay for a copy of the FIR?"
-  ],
-  rights: [
-    "What is the POSH Act 2013?",
-    "What are my inheritance and property rights?",
-    "How can I get free legal aid from NALSA?"
-  ],
-  advocate: [
-    "How do I chat with Adv. Vaishnavi Shahane?",
-    "Is the legal consultation free on this portal?",
-    "What practice areas do advocates cover here?"
-  ],
-  default: [
-    "What are my basic fundamental rights?",
-    "Show me emergency numbers again",
-    "How do I register a complaint on NCW?"
-  ]
+const detectDefaultLanguage = () => {
+  if (typeof navigator !== "undefined") {
+    const browserLang = navigator.language || navigator.userLanguage || "";
+    if (browserLang.startsWith("hi")) return "hi";
+    if (browserLang.startsWith("mr")) return "mr";
+  }
+  return "en";
+};
+
+const GET_QUICK_ACTIONS = (lang) => {
+  if (lang === "hi") {
+    return [
+      { label: "साइबर अपराध", query: "मुझे ऑनलाइन उत्पीड़न के लिए साइबर अपराध की शिकायत कैसे दर्ज करनी चाहिए?", type: "default" },
+      { label: "घरेलू हिंसा", query: "कौटुंबिक हिंसाचार (घरेलू हिंसा) अधिनियम 2005 के तहत क्या सुरक्षा उपलब्ध है?", type: "default" },
+      { label: "एफआईआर सहायता", query: "जीरो एफआईआर क्या है और यदि पुलिस एफआईआर दर्ज करने से इनकार करे तो क्या करें?", type: "default" },
+      { label: "महिला अधिकार", query: "कार्यस्थल पर उत्पीड़न (POSH) के खिलाफ मेरे कानूनी अधिकार क्या हैं?", type: "default" },
+      { label: "वकील खोजें", query: "मैं लीगलसखी पर एक सत्यापित वकील से कैसे संपर्क कर सकती हूँ?", type: "default" },
+      { label: "आपातकालीन सहायता", query: "आपातकालीन: मुझे तत्काल सुरक्षा और पुलिस हेल्पलाइन नंबर चाहिए!", type: "emergency" }
+    ];
+  }
+  if (lang === "mr") {
+    return [
+      { label: "सायबर गुन्हे", query: "मी ऑनलाइन छळासाठी सायबर क्राईम तक्रार कशी नोंदवावी?", type: "default" },
+      { label: "कौटुंबिक हिंसाचार", query: "कौटुंबिक हिंसाचार विरोधी कायदा २००५ अंतर्गत कोणती संरक्षणे उपलब्ध आहेत?", type: "default" },
+      { label: "एफआयआर मदत", query: "झिरो एफआयआर म्हणजे काय आणि पोलिसांनी एफआयआर नोंदवण्यास नकार दिल्यास काय करावे?", type: "default" },
+      { label: "महिलांचे हक्क", query: "कामाच्या ठिकाणी होणाऱ्या छळाविरुद्ध (POSH) माझे कायदेशीर हक्क काय आहेत?", type: "default" },
+      { label: "वकील शोधा", query: "मी लीगलसखीवर प्रमाणित वकीलाशी संपर्क कसा साधू?", type: "default" },
+      { label: "तातडीची मदत", query: "आणीबाणी: मला तात्काळ आपत्कालीन हेल्पलाइन आणि सुरक्षा संसाधने हवी आहेत!", type: "emergency" }
+    ];
+  }
+  return [
+    { label: "Cyber Crime", query: "How do I file a cyber crime complaint for online harassment?", type: "default" },
+    { label: "Domestic Violence", query: "What protection is available under the Domestic Violence Act 2005?", type: "default" },
+    { label: "FIR Help", query: "What is a Zero FIR and what if the police refuse to file an FIR?", type: "default" },
+    { label: "Women's Rights", query: "What are my legal rights against workplace harassment (POSH)?", type: "default" },
+    { label: "Find Advocate", query: "How do I find and connect with a verified advocate on LegalSakhi?", type: "default" },
+    { label: "Emergency Support", query: "EMERGENCY: I need immediate legal helplines and safety resources!", type: "emergency" }
+  ];
+
+};
+
+const GET_FOLLOW_UPS = (lang) => {
+  if (lang === "hi") {
+    return {
+      cyber: [
+        "ऑनलाइन पीछा करने की शिकायत कैसे दर्ज करें?",
+        "धारा 66E क्या है?",
+        "क्या मैं गुमनाम शिकायत दर्ज कर सकती हूँ?"
+      ],
+      violence: [
+        "सुरक्षा आदेश क्या होता है?",
+        "मैं सुरक्षा अधिकारी से कैसे संपर्क करूँ?",
+        "क्या मानसिक शोषण भी शामिल है?"
+      ],
+      fir: [
+        "जीरो एफआईआर क्या है?",
+        "पुलिस एफआईआर दर्ज न करे तो क्या करें?",
+        "क्या एफआईआर की कॉपी मुफ्त मिलती है?"
+      ],
+      rights: [
+        "पॉश अधिनियम 2013 क्या है?",
+        "संपत्ति में बेटियों के अधिकार क्या हैं?",
+        "मुफ्त कानूनी सहायता कैसे लें?"
+      ],
+      advocate: [
+        "एडवोकेट वैष्णवी शहाणे से चैट कैसे करें?",
+        "क्या यहाँ कानूनी सलाह मुफ्त है?",
+        "वकील किन मामलों में सहायता करते हैं?"
+      ],
+      default: [
+        "मेरे बुनियादी कानूनी अधिकार क्या हैं?",
+        "मुझे आपातकालीन नंबर दिखाएं",
+        "महिला आयोग में शिकायत कैसे करें?"
+      ]
+    };
+  }
+  if (lang === "mr") {
+    return {
+      cyber: [
+        "ऑनलाइन पाठलाग करण्याची तक्रार कशी करावी?",
+        "कलम ६६ई (66E) काय आहे?",
+        "मी निनावी तक्रार नोंदवू शकते का?"
+      ],
+      violence: [
+        "संरक्षण आदेश म्हणजे काय?",
+        "मी संरक्षण अधिकाऱ्याशी कसा संपर्क साधू?",
+        "मानसिक छळ देखील कायद्यात समाविष्ट आहे का?"
+      ],
+      fir: [
+        "झिरो एफआयआर म्हणजे काय?",
+        "पोलिसांनी एफआयआर नोंदवण्यास नकार दिल्यास काय करावे?",
+        "एफआयआरच्या प्रतीसाठी पैसे द्यावे लागतात का?"
+      ],
+      rights: [
+        "पॉश (POSH) कायदा २०१३ काय आहे?",
+        "माझा मालमत्ता हक्क काय आहे?",
+        "मोफत कायदेशीर मदत कशी मिळवायची?"
+      ],
+      advocate: [
+        "अ‍ॅड. वैष्णवी शहाणे यांच्याशी चॅट कशी करावी?",
+        "या पोर्टलवर कायदेशीर सल्ला मोफत आहे का?",
+        "येथील वकील कोणत्या क्षेत्रांमध्ये मदत करतात?"
+      ],
+      default: [
+        "माझे मूलभूत हक्क काय आहेत?",
+        "मला आपत्कालीन नंबर पुन्हा दाखवा",
+        "महिला आयोगाकडे तक्रार कशी करावी?"
+      ]
+    };
+  }
+  return {
+    cyber: [
+      "How do I report online stalking?",
+      "What is Section 66E of the IT Act?",
+      "Can I file a cyber complaint anonymously?"
+    ],
+    violence: [
+      "What is a Protection Order?",
+      "How do I contact a Protection Officer?",
+      "Is emotional and financial abuse covered?"
+    ],
+    fir: [
+      "What is a Zero FIR?",
+      "What if the police refuse my FIR?",
+      "Do I have to pay for a copy of the FIR?"
+    ],
+    rights: [
+      "What is the POSH Act 2013?",
+      "What are my inheritance and property rights?",
+      "How can I get free legal aid from NALSA?"
+    ],
+    advocate: [
+      "How do I chat with Adv. Vaishnavi Shahane?",
+      "Is the legal consultation free on this portal?",
+      "What practice areas do advocates cover here?"
+    ],
+    default: [
+      "What are my basic fundamental rights?",
+      "Show me emergency numbers again",
+      "How do I register a complaint on NCW?"
+    ]
+  };
 };
 
 export default function LigalSakhiAIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [showEmergencyBanner, setShowEmergencyBanner] = useState(false);
-  const [language, setLanguage] = useState("en"); // en, hi, mr
+  const [language, setLanguage] = useState(detectDefaultLanguage()); // en, hi, mr
   const [activeAttachment, setActiveAttachment] = useState(null);
-  const [suggestedQuestions, setSuggestedQuestions] = useState(FOLLOW_UPS.default);
+  const [suggestedQuestions, setSuggestedQuestions] = useState(GET_FOLLOW_UPS(detectDefaultLanguage()).default);
+  const QUICK_ACTIONS = GET_QUICK_ACTIONS(language);
+  const languageStrings = TRANSLATIONS[language];
   const [pulse, setPulse] = useState(true);
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -86,6 +269,25 @@ export default function LigalSakhiAIAssistant() {
   const fileInputRef = useRef(null);
   const recognitionRef = useRef(null);
   const synthesisRef = useRef(null);
+
+  // Handle language changes: translate greeting and update UI texts instantly
+  useEffect(() => {
+    setMessages((prev) => 
+      prev.map((msg) => {
+        if (msg.isWelcome) {
+          return {
+            ...msg,
+            text: TRANSLATIONS[language].welcome
+          };
+        }
+        return msg;
+      })
+    );
+    
+    // Update active suggested questions based on the new language
+    const currentFollowUps = GET_FOLLOW_UPS(language);
+    setSuggestedQuestions(currentFollowUps.default);
+  }, [language]);
 
   // Initialize Speech Synthesis and Speech Recognition
   useEffect(() => {
@@ -96,7 +298,12 @@ export default function LigalSakhiAIAssistant() {
     const saved = localStorage.getItem("ligalsakhi_ai_history");
     if (saved) {
       try {
-        setMessages(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        } else {
+          loadInitialWelcome();
+        }
       } catch (e) {
         loadInitialWelcome();
       }
@@ -111,7 +318,6 @@ export default function LigalSakhiAIAssistant() {
       rec.continuous = false;
       rec.interimResults = false;
       rec.lang = "en-IN"; // Supports English and Indian accents
-      
       rec.onstart = () => setIsListening(true);
       rec.onend = () => setIsListening(false);
       rec.onresult = (event) => {
@@ -162,7 +368,7 @@ export default function LigalSakhiAIAssistant() {
       {
         id: 1,
         sender: "ai",
-        text: "Namaste! I am LigalSakhi AI, your secure legal companion. I am designed to assist women across India with direct legal awareness, cyber safety, domestic abuse support, FIR processes, and connecting with verified legal advocates. Everything you discuss here is completely confidential.",
+        text: TRANSLATIONS[language].welcome,
         timestamp: getCurrentTime(),
         isWelcome: true
       }
@@ -301,17 +507,18 @@ export default function LigalSakhiAIAssistant() {
 
     // Determine follow-up suggestions dynamically
     const lowerText = userText.toLowerCase();
-    let nextSuggestions = FOLLOW_UPS.default;
-    if (lowerText.includes("cyber") || lowerText.includes("online") || lowerText.includes("stalk") || lowerText.includes("photo")) {
-      nextSuggestions = FOLLOW_UPS.cyber;
-    } else if (lowerText.includes("viol") || lowerText.includes("abus") || lowerText.includes("beat") || lowerText.includes("husband") || lowerText.includes("domestic")) {
-      nextSuggestions = FOLLOW_UPS.violence;
-    } else if (lowerText.includes("fir") || lowerText.includes("police") || lowerText.includes("complain") || lowerText.includes("station")) {
-      nextSuggestions = FOLLOW_UPS.fir;
-    } else if (lowerText.includes("right") || lowerText.includes("work") || lowerText.includes("posh") || lowerText.includes("property")) {
-      nextSuggestions = FOLLOW_UPS.rights;
-    } else if (lowerText.includes("advoc") || lowerText.includes("lawy") || lowerText.includes("chat") || lowerText.includes("vaishnavi")) {
-      nextSuggestions = FOLLOW_UPS.advocate;
+    const currentFollowUps = GET_FOLLOW_UPS(language);
+    let nextSuggestions = currentFollowUps.default;
+    if (lowerText.includes("cyber") || lowerText.includes("online") || lowerText.includes("stalk") || lowerText.includes("photo") || lowerText.includes("सायबर") || lowerText.includes("अपराध") || lowerText.includes("उत्पीड़न")) {
+      nextSuggestions = currentFollowUps.cyber;
+    } else if (lowerText.includes("viol") || lowerText.includes("abus") || lowerText.includes("beat") || lowerText.includes("husband") || lowerText.includes("domestic") || lowerText.includes("हिंसा") || lowerText.includes("कौटुंबिक") || lowerText.includes("छळ")) {
+      nextSuggestions = currentFollowUps.violence;
+    } else if (lowerText.includes("fir") || lowerText.includes("police") || lowerText.includes("complain") || lowerText.includes("station") || lowerText.includes("एफआयआर") || lowerText.includes("तक्रार")) {
+      nextSuggestions = currentFollowUps.fir;
+    } else if (lowerText.includes("right") || lowerText.includes("work") || lowerText.includes("posh") || lowerText.includes("property") || lowerText.includes("अधिकार") || lowerText.includes("हक्क")) {
+      nextSuggestions = currentFollowUps.rights;
+    } else if (lowerText.includes("advoc") || lowerText.includes("lawy") || lowerText.includes("chat") || lowerText.includes("vaishnavi") || lowerText.includes("वकील")) {
+      nextSuggestions = currentFollowUps.advocate;
     }
 
     setSuggestedQuestions(nextSuggestions);
@@ -462,7 +669,7 @@ Alternatively, feel free to describe your situation, and I will highlight releva
       setIsOpen(true);
       setIsMinimized(false);
     }
-    if (action.label === "Emergency Support") {
+    if (action.type === "emergency") {
       setShowEmergencyBanner(true);
     }
     handleSendMessage(action.query);
@@ -473,7 +680,7 @@ Alternatively, feel free to describe your situation, and I will highlight releva
   };
 
   const clearChatHistory = () => {
-    if (window.confirm("Are you sure you want to clear your confidential chat history with LigalSakhi AI?")) {
+    if (window.confirm(languageStrings.clearPrompt)) {
       localStorage.removeItem("ligalsakhi_ai_history");
       if (synthesisRef.current) {
         synthesisRef.current.cancel();
@@ -492,17 +699,17 @@ Alternatively, feel free to describe your situation, and I will highlight releva
           <div className="emergency-banner-content">
             <FaExclamationTriangle className="emergency-warn-icon animate-pulse" />
             <div>
-              <strong className="emergency-title">Emergency Legal & Safety Helplines</strong>
-              <p className="emergency-desc">If you are in immediate danger, please contact emergency numbers right away.</p>
+              <strong className="emergency-title">{languageStrings.emergencyTitle}</strong>
+              <p className="emergency-desc">{languageStrings.emergencyDesc}</p>
               <div className="emergency-btn-row">
                 <a href="tel:112" className="emergency-call-btn police">
-                  <FaPhoneAlt size={11} /> Call Police (112)
+                  <FaPhoneAlt size={11} /> {languageStrings.callPolice}
                 </a>
                 <a href="tel:1091" className="emergency-call-btn women">
-                  <FaPhoneAlt size={11} /> Women Helpline (1091)
+                  <FaPhoneAlt size={11} /> {languageStrings.womenHelpline}
                 </a>
                 <a href="tel:181" className="emergency-call-btn maha">
-                  <FaPhoneAlt size={11} /> Maharashtra 181
+                  <FaPhoneAlt size={11} /> {languageStrings.mahaHelpline}
                 </a>
               </div>
             </div>
@@ -604,7 +811,7 @@ Alternatively, feel free to describe your situation, and I will highlight releva
 
           {/* CHAT BODY & INPUT (HIDDEN WHEN MINIMIZED) */}
           {!isMinimized && (
-            <>
+            <React.Fragment>
               {/* CHAT MESSAGES PANEL */}
               <div className="chat-messages-panel">
                 
@@ -631,13 +838,13 @@ Alternatively, feel free to describe your situation, and I will highlight releva
                             <div>
                               <p className="welcome-greet-text">{msg.text}</p>
                               <div className="welcome-services-card">
-                                <span className="welcome-card-header">💡 How I can assist you:</span>
+                                <span className="welcome-card-header">{languageStrings.welcomeHeader}</span>
                                 <ul className="welcome-services-list">
-                                  <li><span>⚖️</span> <strong>Women's Rights:</strong> POSH Act, Property rights, Free Legal Aid.</li>
-                                  <li><span>💻</span> <strong>Cyber Crime:</strong> Stalking, Privacy violations, Online Harassment.</li>
-                                  <li><span>🏠</span> <strong>Domestic Violence:</strong> Protection orders, Residential rights, Aid resources.</li>
-                                  <li><span>📋</span> <strong>FIR Guidance:</strong> Registration steps, Zero FIRs, Police guidelines.</li>
-                                  <li><span>👩‍⚖️</span> <strong>Finding Advocates:</strong> Verified professional support directory.</li>
+                                  <li><span>⚖️</span> <strong>{languageStrings.welcome1}</strong></li>
+                                  <li><span>💻</span> <strong>{languageStrings.welcome2}</strong></li>
+                                  <li><span>🏠</span> <strong>{languageStrings.welcome3}</strong></li>
+                                  <li><span>📋</span> <strong>{languageStrings.welcome4}</strong></li>
+                                  <li><span>👩‍⚖️</span> <strong>{languageStrings.welcome5}</strong></li>
                                 </ul>
                               </div>
                             </div>
@@ -678,11 +885,11 @@ Alternatively, feel free to describe your situation, and I will highlight releva
                             <button
                               className={`msg-audio-speak-btn ${speakingMessageId === msg.id ? "speaking" : ""}`}
                               onClick={() => speakText(msg.text, msg.id)}
-                              title={speakingMessageId === msg.id ? "Stop Speaking" : "Listen to Response (Text-to-Speech)"}
-                              aria-label={speakingMessageId === msg.id ? "Stop Speaking" : "Listen to Response"}
+                              title={speakingMessageId === msg.id ? languageStrings.stopBtn : languageStrings.listenBtn}
+                              aria-label={speakingMessageId === msg.id ? languageStrings.stopBtn : languageStrings.listenBtn}
                             >
                               {speakingMessageId === msg.id ? <FaVolumeMute size={11} /> : <FaVolumeUp size={11} />}
-                              <span>{speakingMessageId === msg.id ? "Stop" : "Listen"}</span>
+                              <span>{speakingMessageId === msg.id ? languageStrings.stopBtn : languageStrings.listenBtn}</span>
                             </button>
                           )}
                         </div>
@@ -705,7 +912,7 @@ Alternatively, feel free to describe your situation, and I will highlight releva
                           <span className="typing-dot animate-bounce"></span>
                           <span className="typing-dot animate-bounce delay-100"></span>
                           <span className="typing-dot animate-bounce delay-200"></span>
-                          <span className="typing-indicator-text">LigalSakhi is preparing trusted guidance...</span>
+                          <span className="typing-indicator-text">{languageStrings.typingIndicator}</span>
                         </div>
                       </div>
                     </div>
@@ -722,11 +929,11 @@ Alternatively, feel free to describe your situation, and I will highlight releva
                   {QUICK_ACTIONS.map((action, index) => (
                     <button
                       key={index}
-                      className={`quick-action-chip-btn ${action.label === "Emergency Support" ? "emergency" : ""}`}
+                      className={`quick-action-chip-btn ${action.type === "emergency" ? "emergency" : ""}`}
                       onClick={() => handleQuickAction(action)}
                       title={action.query}
                     >
-                      {action.label === "Emergency Support" && <span className="chip-badge">🚨</span>}
+                      {action.type === "emergency" && <span className="chip-badge">🚨</span>}
                       {action.label}
                     </button>
                   ))}
@@ -736,7 +943,7 @@ Alternatively, feel free to describe your situation, and I will highlight releva
               {/* SUGGESTED FOLLOW-UPS SECTION */}
               {suggestedQuestions && suggestedQuestions.length > 0 && (
                 <div className="suggested-questions-tray">
-                  <span className="tray-label">Suggested follow-ups:</span>
+                  <span className="tray-label">{languageStrings.suggestedTray}</span>
                   <div className="suggested-questions-list">
                     {suggestedQuestions.map((q, idx) => (
                       <button 
@@ -798,16 +1005,16 @@ Alternatively, feel free to describe your situation, and I will highlight releva
                         handleSendMessage();
                       }
                     }}
-                    placeholder="Describe your legal issue (e.g. harassment, stalking, rights)..."
-                    aria-label="Describe your legal issue"
+                    placeholder={languageStrings.placeholder}
+                    aria-label={languageStrings.placeholder}
                     rows={1}
                   />
 
                   <button 
                     className={`toolbar-action-btn mic-record ${isListening ? "recording active" : ""}`} 
                     onClick={toggleListening}
-                    title={isListening ? "Stop listening" : "Speak to write (Voice Input)"}
-                    aria-label={isListening ? "Stop listening" : "Voice Input"}
+                    title={isListening ? languageStrings.stopBtn : languageStrings.listenBtn}
+                    aria-label={isListening ? languageStrings.stopBtn : languageStrings.listenBtn}
                   >
                     <FaMicrophone />
                     {isListening && <span className="mic-pulse-ring"></span>}
@@ -825,13 +1032,13 @@ Alternatively, feel free to describe your situation, and I will highlight releva
                 </div>
 
                 <div className="toolbar-bottom-disclaimer">
-                  <span>LigalSakhi AI provides immediate general legal information. For formal representation, use our "Find Advocates" portal.</span>
-                  <button className="clear-history-button" onClick={clearChatHistory} title="Clear Chat History">
-                    Clear Chat
+                  <span>{languageStrings.disclaimer}</span>
+                  <button className="clear-history-button" onClick={clearChatHistory} title={languageStrings.clearChat}>
+                    {languageStrings.clearChat}
                   </button>
                 </div>
               </div>
-            </>
+            </React.Fragment>
           )}
 
         </div>

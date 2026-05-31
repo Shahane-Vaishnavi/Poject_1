@@ -154,6 +154,21 @@
   box-shadow: 0 4px 15px rgba(11, 45, 92, 0.15);
 }
 
+.chat-window-container.maximized-half {
+  width: 50vw;
+  height: 85vh;
+  max-width: 800px;
+  min-width: 480px;
+}
+
+@media (max-width: 768px) {
+  .chat-window-container.maximized-half {
+    width: calc(100vw - 24px);
+    height: calc(100vh - 100px);
+    min-width: unset;
+  }
+}
+
 /* HEADER SECTION */
 .chat-window-header {
   height: 64px;
