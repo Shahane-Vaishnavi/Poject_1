@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaPlayCircle, FaHandsHelping, FaPhoneAlt, FaFileSignature, FaBriefcase, FaUserShield, FaUserGraduate, FaWheelchair, FaBalanceScale, FaFilter, FaCheckCircle, FaStar, FaPlusSquare, FaEllipsisV } from 'react-icons/fa';
 import './index.css';
+import LigalSakhiAIAssistant from './components/LigalSakhiAIAssistant';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -38,6 +39,7 @@ export default function App() {
       <div className="accessibility-btn">
         <FaWheelchair />
       </div>
+      <LigalSakhiAIAssistant />
     </div>
   );
 }
@@ -706,7 +708,7 @@ function ContactPage() {
         <div className="contact-info">
           <h3>Get In Touch</h3>
           <p><strong>Address:</strong> LegalSakhi Headquarters,M.B.E. Society's College of Engineering,Ambajogai 431517</p>
-          <p><strong>Email:</strong> legalsakhi@gmail.com</p>
+          <p><strong>Email:</strong>legalsakhi18@gmail.com</p>
           <p><strong>Phone:</strong> +91 9370904695</p>
           <p><strong>Hours:</strong> Mon - Sat (9:00 AM to 6:00 PM)</p>
         </div>
