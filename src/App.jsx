@@ -115,7 +115,7 @@ function SocialSidebar() {
   return (
     <div className="social-sidebar">
       <a href="https://www.facebook.com/profile.php?id=61589661144564" target="_blank" rel="noopener noreferrer" className="fb"><FaFacebookF /></a>
-      <a href="https://x.com/LegalSakhi" target="_blank" rel="noopener noreferrer" className="x"><FaTwitter /></a>
+      <a href="https://x.com/LigalSakhi" target="_blank" rel="noopener noreferrer" className="x"><FaTwitter /></a>
       <a href="https://www.instagram.com/shahanevaishnavi162026" target="_blank" rel="noopener noreferrer" className="ig"><FaInstagram /></a>
       <a href="#" className="yt"><FaYoutube /></a>
     </div>
