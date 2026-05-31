@@ -6,10 +6,22 @@ import LigalSakhiAIAssistant from './components/LigalSakhiAIAssistant';
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearch = () => {
+    const trimmed = searchTerm.trim();
+    if (!trimmed) return;
+    setCurrentPage('findAdvocates');
+  };
+
   return (
     <div>
       <SocialSidebar />
-      <Header setCurrentPage={setCurrentPage} />
+      <Header
+        setCurrentPage={setCurrentPage}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        handleSearch={handleSearch}
+      />
 
       {currentPage === 'home' && (
         <>
@@ -28,7 +40,7 @@ export default function App() {
 
       {currentPage === 'about' && <AboutPage />}
       {currentPage === 'legalResources' && <LegalResourcesPage />}
-      {currentPage === 'findAdvocates' && <FindAdvocatesPage />}
+      {currentPage === 'findAdvocates' && <FindAdvocatesPage searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}
       {currentPage === 'emergency' && <EmergencyPage />}
       {currentPage === 'schemes' && <SchemesPage />}
       {currentPage === 'media' && <MediaPage />}
@@ -44,11 +56,11 @@ export default function App() {
   );
 }
 
-function Header({ setCurrentPage }) {
+function Header({ setCurrentPage, searchTerm, setSearchTerm, handleSearch }) {
   return (
     <header className="sticky-header">
       <div className="very-top-bar">
-        <div className="left-links">  ``
+        <div className="left-links">
           Skip to Main Content | Screen Reader Access | हिंदी | मराठी
         </div>
         <div className="right-links">
@@ -66,8 +78,20 @@ function Header({ setCurrentPage }) {
         </div>
         <div className="search-and-login">
           <div className="search-container">
-            <input type="text" placeholder="Search here..." />
-            <FaSearch />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
+              placeholder="Search here..."
+            />
+            <button onClick={handleSearch} aria-label="Search">
+              <FaSearch />
+            </button>
           </div>
           <button className="login-btn-outline" onClick={() => setCurrentPage('userLogin')}>User Login</button>
           <button className="login-btn-solid" onClick={() => setCurrentPage('advocateLogin')}>Advocate Login</button>
@@ -374,16 +398,28 @@ function AboutPage() {
   );
 }
 
-function FindAdvocatesPage() {
+function FindAdvocatesPage({ searchTerm, setSearchTerm }) {
   const [selectedAdvocate, setSelectedAdvocate] = useState(null);
   const [activeChat, setActiveChat] = useState(null);
   const [isChatMinimized, setIsChatMinimized] = useState(false);
   const [isChatMaximized, setIsChatMaximized] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [showCategoryBar, setShowCategoryBar] = useState(true);
+  const categories = [
+    'All',
+    'Family Law',
+    'Criminal Defense',
+    'Cyber Law',
+    'Property',
+    'Workplace Harassment',
+    'Women\'s Rights'
+  ];
 
   const advocates = [
     {
       name: "Vaishnavi Shahane",
       skills: "Family Law, Criminal Defense",
+      categories: ["Family Law", "Criminal Defense", "Women\'s Rights"],
       languages: "English, Marathi, Hindi",
       exp: "8 Years",
       price: "Free",
@@ -399,6 +435,7 @@ function FindAdvocatesPage() {
     {
       name: "Mayuri Landage",
       skills: "Cyber Law, Women's Rights",
+      categories: ["Cyber Law", "Women\'s Rights"],
       languages: "English, Marathi",
       exp: "5 Years",
       price: "Free",
@@ -414,6 +451,7 @@ function FindAdvocatesPage() {
     {
       name: "Shravani Pampatvar",
       skills: "Property Law, Civil Litigation",
+      categories: ["Property", "Civil Litigation"],
       languages: "English, Hindi, Telugu",
       exp: "12 Years",
       price: "Free",
@@ -429,6 +467,7 @@ function FindAdvocatesPage() {
     {
       name: "Priya Sharma",
       skills: "Corporate Law, Workplace Harassment",
+      categories: ["Workplace Harassment", "Corporate Law", "Women\'s Rights"],
       languages: "English, Hindi",
       exp: "6 Years",
       price: "Free",
@@ -443,6 +482,7 @@ function FindAdvocatesPage() {
     {
       name: "Anjali Deshmukh",
       skills: "Domestic Violence, Divorce",
+      categories: ["Family Law", "Domestic Violence", "Women\'s Rights"],
       languages: "Marathi, English",
       exp: "10 Years",
       price: "Free",
@@ -458,6 +498,7 @@ function FindAdvocatesPage() {
     {
       name: "Kavita Reddy",
       skills: "Human Rights, NGO Support",
+      categories: ["Human Rights", "NGO Support", "Women\'s Rights"],
       languages: "English, Kannada, Hindi",
       exp: "15 Years",
       price: "Pro Bono (Free)",
@@ -472,6 +513,30 @@ function FindAdvocatesPage() {
     }
   ];
 
+  const query = searchTerm.trim().toLowerCase();
+  const searchTokens = query.split(/\s+/).filter(Boolean);
+
+  const filteredAdvocates = advocates.filter((adv) => {
+    const text = [
+      adv.name,
+      adv.skills,
+      adv.languages,
+      adv.bio,
+      adv.exp,
+      adv.price,
+      ...(adv.categories || [])
+    ].join(' ').toLowerCase();
+
+    const matchesSearch = searchTokens.length === 0
+      ? true
+      : searchTokens.every((token) => text.includes(token));
+
+    const matchesCategory = selectedCategory === 'All' ||
+      (adv.categories || []).some((category) => category.toLowerCase() === selectedCategory.toLowerCase());
+
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="find-advocates-page">
       <div className="advocates-header-banner">
@@ -484,22 +549,39 @@ function FindAdvocatesPage() {
       <div className="advocates-filter-bar">
         <div className="adv-search">
           <FaSearch color="#666" />
-          <input type="text" placeholder="Search name..." />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}
+            placeholder="Search name, skills, specialties, background..."
+            aria-label="Search advocates"
+          />
         </div>
-        <button className="adv-filter-btn"><FaFilter /> Filter</button>
-        <div className="adv-categories-scroll">
-          <button className="adv-category active">All</button>
-          <button className="adv-category">Family Law</button>
-          <button className="adv-category">Criminal Defense</button>
-          <button className="adv-category">Cyber Law</button>
-          <button className="adv-category">Property</button>
-          <button className="adv-category">Workplace Harassment</button>
-          <button className="adv-category">Women's Rights</button>
-        </div>
+        <button className="adv-filter-btn" onClick={() => setShowCategoryBar((prev) => !prev)}>
+          <FaFilter /> {showCategoryBar ? 'Hide Filters' : 'Filter'}
+        </button>
+        {showCategoryBar && (
+          <div className="adv-categories-scroll">
+            {categories.map((category) => (
+              <button
+                key={category}
+                className={`adv-category ${selectedCategory === category ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="advocates-grid-layout">
-        {advocates.map((adv, idx) => (
+        {filteredAdvocates.map((adv, idx) => (
           <div className="advocate-astrotalk-card" key={idx} onClick={() => setSelectedAdvocate(adv)}>
             <div className="adv-card-top">
               <img src={adv.image} alt={adv.name} className="adv-avatar" />
