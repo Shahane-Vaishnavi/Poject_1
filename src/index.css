@@ -106,17 +106,35 @@ body {
 
 .search-container input {
   width: 100%;
-  padding: 12px 40px 12px 15px;
+  padding: 12px 48px 12px 15px;
   border: 1px solid #ddd;
   outline: none;
 }
 
-.search-container svg {
+.search-container button {
   position: absolute;
-  right: 15px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  border: none;
+  background: transparent;
+  color: #555;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.search-container button:hover {
+  color: #0d5b75;
+}
+
+.search-container button svg {
+  position: static;
+  transform: none;
 }
 
 .login-btn {
