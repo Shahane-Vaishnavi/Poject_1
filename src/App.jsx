@@ -1,16 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaPlayCircle, FaHandsHelping, FaPhoneAlt, FaFileSignature, FaBriefcase, FaUserShield, FaUserGraduate, FaWheelchair, FaBalanceScale, FaFilter, FaCheckCircle, FaStar, FaPlusSquare, FaEllipsisV } from 'react-icons/fa';
+import { FaSearch, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaPlayCircle, FaHandsHelping, FaPhoneAlt, FaFileSignature, FaBriefcase, FaUserShield, FaUserGraduate, FaWheelchair, FaBalanceScale, FaFilter, FaCheckCircle, FaStar, FaPlusSquare, FaEllipsisV, FaMoon, FaSun } from 'react-icons/fa';
 import './index.css';
 import LigalSakhiAIAssistant from './components/LigalSakhiAIAssistant';
+import { UserProfilePage, AdvocateProfilePage } from './components/ProfilePages';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
-
+  const [theme, setTheme] = useState('light');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentAdvocate, setCurrentAdvocate] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('legalSakhiTheme') || 'light';
+    setTheme(savedTheme);
+    document.body.classList.toggle('dark', savedTheme === 'dark');
+
+    const savedUser = localStorage.getItem('legalSakhiUser');
+    const savedAdvocate = localStorage.getItem('legalSakhiAdvocate');
+    if (savedUser) setCurrentUser(JSON.parse(savedUser));
+    if (savedAdvocate) setCurrentAdvocate(JSON.parse(savedAdvocate));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('legalSakhiTheme', theme);
+    document.body.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
   const handleSearch = () => {
     const trimmed = searchTerm.trim();
     if (!trimmed) return;
     setCurrentPage('findAdvocates');
+  };
+
+  const updateUserSession = (profile) => {
+    setCurrentUser(profile);
+    localStorage.setItem('legalSakhiUser', JSON.stringify(profile));
+  };
+
+  const updateAdvocateSession = (profile) => {
+    setCurrentAdvocate(profile);
+    localStorage.setItem('legalSakhiAdvocate', JSON.stringify(profile));
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setCurrentAdvocate(null);
+    localStorage.removeItem('legalSakhiUser');
+    localStorage.removeItem('legalSakhiAdvocate');
+    setCurrentPage('home');
   };
 
   return (
@@ -21,6 +59,11 @@ export default function App() {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         handleSearch={handleSearch}
+        currentUser={currentUser}
+        currentAdvocate={currentAdvocate}
+        onLogout={handleLogout}
+        theme={theme}
+        setTheme={setTheme}
       />
 
       {currentPage === 'home' && (
@@ -45,8 +88,10 @@ export default function App() {
       {currentPage === 'schemes' && <SchemesPage />}
       {currentPage === 'media' && <MediaPage />}
       {currentPage === 'contact' && <ContactPage />}
-      {currentPage === 'userLogin' && <UserLogin setCurrentPage={setCurrentPage} />}
-      {currentPage === 'advocateLogin' && <AdvocateLogin setCurrentPage={setCurrentPage} />}
+      {currentPage === 'userLogin' && <UserLogin setCurrentPage={setCurrentPage} onLogin={updateUserSession} />}
+      {currentPage === 'advocateLogin' && <AdvocateLogin setCurrentPage={setCurrentPage} onLogin={updateAdvocateSession} />}
+      {currentPage === 'userProfile' && currentUser && <UserProfilePage user={currentUser} setUser={updateUserSession} logout={handleLogout} />}
+      {currentPage === 'advocateProfile' && currentAdvocate && <AdvocateProfilePage advocate={currentAdvocate} setAdvocate={updateAdvocateSession} logout={handleLogout} />}
       <Footer />
       <div className="accessibility-btn">
         <FaWheelchair />
@@ -56,7 +101,7 @@ export default function App() {
   );
 }
 
-function Header({ setCurrentPage, searchTerm, setSearchTerm, handleSearch }) {
+function Header({ setCurrentPage, searchTerm, setSearchTerm, handleSearch, currentUser, currentAdvocate, onLogout, theme, setTheme }) {
   return (
     <header className="sticky-header">
       <div className="very-top-bar">
@@ -93,8 +138,25 @@ function Header({ setCurrentPage, searchTerm, setSearchTerm, handleSearch }) {
               <FaSearch />
             </button>
           </div>
-          <button className="login-btn-outline" onClick={() => setCurrentPage('userLogin')}>User Login</button>
-          <button className="login-btn-solid" onClick={() => setCurrentPage('advocateLogin')}>Advocate Login</button>
+          <button className="theme-toggle" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+            {theme === 'light' ? <FaMoon /> : <FaSun />}
+          </button>
+          {currentUser ? (
+            <>
+              <button className="login-btn-outline" onClick={() => setCurrentPage('userProfile')}>My Profile</button>
+              <button className="login-btn-solid" onClick={onLogout}>Logout</button>
+            </>
+          ) : currentAdvocate ? (
+            <>
+              <button className="login-btn-outline" onClick={() => setCurrentPage('advocateProfile')}>Advocate Dashboard</button>
+              <button className="login-btn-solid" onClick={onLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <button className="login-btn-outline" onClick={() => setCurrentPage('userLogin')}>User Login</button>
+              <button className="login-btn-solid" onClick={() => setCurrentPage('advocateLogin')}>Advocate Login</button>
+            </>
+          )}
         </div>
       </div>
       <nav className="main-nav">
@@ -259,25 +321,67 @@ function SuccessStories() {
   );
 }
 
-function UserLogin({ setCurrentPage }) {
+function UserLogin({ setCurrentPage, onLogin }) {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const apiBase = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000';
+
+  const handleSubmit = async () => {
+    setStatusMessage('');
+    setLoading(true);
+    try {
+      const path = isSignUp ? '/user/signup' : '/user/login';
+      const payload = isSignUp
+        ? { full_name: fullName, email, password }
+        : { email, password };
+
+      const response = await fetch(`${apiBase}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (!response.ok || data.message?.toLowerCase().includes('invalid') || data.message?.toLowerCase().includes('exists')) {
+        setStatusMessage(data.message || 'Login failed.');
+      } else if (isSignUp) {
+        setStatusMessage('Registration successful. Please sign in.');
+        setIsSignUp(false);
+      } else {
+        onLogin({ id: data.user_id, full_name: data.full_name, email: data.email });
+        setCurrentPage('userProfile');
+      }
+    } catch (error) {
+      setStatusMessage('Unable to connect to the server.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-card">
         <div className="login-left user-bg">
-          <h2>{isSignUp ? "Join LegalSakhi" : "Welcome Back!"}</h2>
-          <p>Access legal resources and find trusted advocates near you.</p>
+          <h2>{isSignUp ? 'Join LegalSakhi' : 'Welcome Back!'}</h2>
+          <p>Access legal resources and connect with trusted advocates near you.</p>
         </div>
         <div className="login-right">
-          <h2>{isSignUp ? "User Sign Up" : "User Login"}</h2>
-          <form className="login-form">
-            {isSignUp && <input type="text" placeholder="Full Name" />}
-            <input type="email" placeholder="Email Address" />
-            <input type="password" placeholder="Password" />
-            <button type="button" className="submit-btn">{isSignUp ? "Sign Up" : "Sign In"}</button>
+          <h2>{isSignUp ? 'User Sign Up' : 'User Login'}</h2>
+          <form className="login-form" onSubmit={(e) => e.preventDefault()}>
+            {isSignUp && <input type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} />}
+            <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button type="button" className="submit-btn" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Processing…' : isSignUp ? 'Sign Up' : 'Sign In'}
+            </button>
           </form>
-          <p className="switch-login" onClick={() => setIsSignUp(!isSignUp)}>
-            {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
+          {statusMessage && <p className="status-message">{statusMessage}</p>}
+          <p className="switch-login" onClick={() => { setIsSignUp(!isSignUp); setStatusMessage(''); }}>
+            {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
           </p>
         </div>
       </div>
@@ -285,28 +389,78 @@ function UserLogin({ setCurrentPage }) {
   );
 }
 
-function AdvocateLogin({ setCurrentPage }) {
+function AdvocateLogin({ setCurrentPage, onLogin }) {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [barCouncilId, setBarCouncilId] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const apiBase = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000';
+
+  const handleSubmit = async () => {
+    setStatusMessage('');
+    setLoading(true);
+    try {
+      const path = isSignUp ? '/advocate/signup' : '/advocate/login';
+      const payload = isSignUp
+        ? { full_name: fullName, email, password, bar_council_id: barCouncilId }
+        : { email, password, bar_council_id: barCouncilId };
+
+      const response = await fetch(`${apiBase}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      if (!response.ok || data.message?.toLowerCase().includes('invalid') || data.message?.toLowerCase().includes('exists')) {
+        setStatusMessage(data.message || 'Unable to authenticate advocate.');
+      } else if (isSignUp) {
+        setStatusMessage('Registration successful. Please sign in.');
+        setIsSignUp(false);
+      } else {
+        onLogin({
+          id: data.advocate_id,
+          full_name: data.full_name,
+          email: data.email,
+          bar_council_id: data.bar_council_id,
+        });
+        setCurrentPage('advocateProfile');
+      }
+    } catch (error) {
+      setStatusMessage('Unable to connect to the server.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-card">
         <div className="login-left adv-bg">
-          <h2>{isSignUp ? "Partner With Us" : "Advocate Portal"}</h2>
+          <h2>{isSignUp ? 'Partner With Us' : 'Advocate Portal'}</h2>
           <p>Provide legal aid and empower women across Maharashtra.</p>
         </div>
         <div className="login-right">
-          <h2>{isSignUp ? "Advocate Sign Up" : "Advocate Login"}</h2>
-          <form className="login-form">
-            {isSignUp && <input type="text" placeholder="Full Name" />}
-            <input type="email" placeholder="Email Address" />
-            <input type="password" placeholder="Password" />
-            <input type="text" placeholder="Bar Council Registration Number (Unique ID)" required />
-            <button type="button" className="submit-btn" onClick={() => alert('Authenticating Unique Advocate ID...')}>
-              {isSignUp ? "Verify & Sign Up" : "Verify & Sign In"}
+          <h2>{isSignUp ? 'Advocate Sign Up' : 'Advocate Login'}</h2>
+          <form className="login-form" onSubmit={(e) => e.preventDefault()}>
+            {isSignUp && <input type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} />}
+            <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type="text"
+              placeholder="Bar Council Registration Number (Unique ID)"
+              value={barCouncilId}
+              onChange={(e) => setBarCouncilId(e.target.value)}
+            />
+            <button type="button" className="submit-btn" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Processing…' : isSignUp ? 'Verify & Sign Up' : 'Verify & Sign In'}
             </button>
           </form>
-          <p className="switch-login" onClick={() => setIsSignUp(!isSignUp)}>
-            {isSignUp ? "Already registered? Sign In" : "New Advocate? Sign Up"}
+          {statusMessage && <p className="status-message">{statusMessage}</p>}
+          <p className="switch-login" onClick={() => { setIsSignUp(!isSignUp); setStatusMessage(''); }}>
+            {isSignUp ? 'Already registered? Sign In' : 'New Advocate? Sign Up'}
           </p>
         </div>
       </div>
